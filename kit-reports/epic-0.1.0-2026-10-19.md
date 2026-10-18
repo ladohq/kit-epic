@@ -1,11 +1,11 @@
 # Отчёт о ките: epic 0.1.0
 
 - Дата: 2026-10-19
-- Кит: корень worktree прогона `create/epic` (`.lado/worktrees/kit-epic/create-epic`), путь задан шагом
-- Коммит: 42fe6f6
+- Кит: корень worktree прогона `create/epic` (`.lado/worktrees/kit-epic/create-epic`), путь дан шагом
+- Коммит: dfa7483
 - Оценил: критик kit-builder (слои a и b)
-- Режим: полная оценка, первый визит `evaluate` прогона `create` (предыдущего отчёта нет)
-- Проходы: проход 1 (kit.yaml и роли) сделал сам критик; проходы 2 (flow по состояниям) и 3 (навыки, потом роли) сделали два свежих независимых субагента. Им дали рубрику, папку кита и зависимые навыки: `sdlc-settings`, роли `supervisor` (это lead-sdlc) и `analyst`, flow `task` из sdlc 0.5.0, `tracker` из tracker-yougile. Отброшено 5 находок одного прохода, 5 оставлены как подтверждённые.
+- Режим: повторная оценка относительно предыдущего отчёта (коммит f419349, кит на 42fe6f6), `git diff 42fe6f6 dfa7483 -- kit.yaml README.md BLUEPRINT.md agents flows skills`
+- Проходы: три прохода по изменённому тексту и его окружению. Проход 1 сделал сам критик (начал с ролей). Проходы 2 (начало с flow) и 3 (начало с навыков) сделали свежие независимые субагенты, у которых были diff, предыдущий отчёт, рубрика и зависимые тексты sdlc 0.5.0. Проверку вырезанных правил критик провёл сам после проходов, по `git diff --word-diff` и таблице автора. Полный проход пропущен: в `create` весь кит новый, и три прохода первой оценки уже были полными (`kit-rubric`, «Re-evaluation» 5). Находки одного прохода: отброшено 0, оставлено как подтверждённые 4.
 
 Находки — кандидаты, которые взвешивает человек. Это не оценка «сдал / не сдал».
 
@@ -14,12 +14,13 @@
 | Слой | Результат |
 |---|---|
 | a. `lado kits check` | OK; 0 предупреждений |
-| a. Бюджет | жёлтый: шагов в flow 7, гейтов 3; обе меры обоснованы в BLUEPRINT.md, раздел 4 |
+| a. Бюджет | жёлтый: шагов в flow 7, гейтов 3. Обе меры обоснованы в BLUEPRINT.md, раздел 4 |
 | a. Flows | нарисован 1; совпадает со скелетом чертежа |
-| b. Рубрика | 15 находок (5 high, 8 medium, 2 low); без находок 5 критериев из 12 |
-| Охват | полная оценка всего кита, 9 файлов |
+| b. Рубрика | 9 находок в изменённом тексте (2 high, 6 medium, 1 low), из них 1 ещё открыта с прошлого раза (F5.2, low). Без находок 7 критериев из 12. Из 15 прежних находок 14 RESOLVED, 1 STILL OPEN |
+| Охват | повторная оценка изменённого текста (8 файлов diff) без полного прохода: в `create` весь текст изменён, первая оценка была полной |
+| Правило остановки | не выполнено: 2 high, 6 medium. Это совет для гейта релиза, а не запрет |
 
-Счёт относится только к тому, что названо в строке «Охват».
+Счёт относится только к тому, что названо в строке «Охват». Его нельзя сравнивать со счётом полной оценки.
 
 ### `lado kits check .`
 
@@ -44,9 +45,9 @@ Read-only: `read-only roles: plan-critic`; `dependencies.lado: ">=0.34"`.
 | Worker roles (not supervisor) | kit | 2 | 3 / 5 | green |
 | Work steps in a flow | flows/epic.yaml | 7 | 5 / 8 | yellow |
 | Gates in a flow | flows/epic.yaml | 3 | 2 / 3 | yellow |
-| Words in a role prompt | agents/delivery.md | 379 | 800 / 1500 | green |
+| Words in a role prompt | agents/delivery.md | 539 | 800 / 1500 | green |
 | Words in a role prompt | agents/plan-critic.md | 344 | 800 / 1500 | green |
-| Words in the lead's prompt | agents/supervisor.md | 747 | 1000 / 1500 | green |
+| Words in the lead's prompt | agents/supervisor.md | 760 | 1000 / 1500 | green |
 | Own skills | kit | 3 | 5 / 10 | green |
 | MCP servers | kit | 0 | 2 / 4 | green |
 
@@ -68,155 +69,169 @@ same as the plan in BLUEPRINT.md
 
 ## Исправить в первую очередь
 
-1. Перед тем как считать красную проверку виной работы, отделять сбой окружения: красный CI PR плана, отказ merge, отсутствующий инструмент в проверках delivery. Сейчас `run` и `close` не знают, что делать, а у delivery такой сбой превращается в `gaps` (F3.1).
-2. Запретить delivery пушить в ветку эпика до гейта, в том числе разрешения конфликтов, которые человек не видел. Пушить в `close` после `delivery_ok` (F12.1).
-3. Записывать ответы человека на гейтах `plan_ok`, `step_ok` и `delivery_ok`, включая решения открытых вопросов «как скажете», в `decisions.md`. Сейчас они живут только в заметке для следующего шага (F2.1).
-4. Не сообщать заново о пробеле, который человек уже перенёс в «Later»: иначе `readiness` ↔ `review` крутится до `max_visits` (F3.3).
-5. Устанавливать предыдущую версию для проверки обновления только в свою папку или контейнер, а не системно на машине человека (F12.2).
+1. `git switch -c readiness/<key>` падает на любом повторном визите `readiness`, а он входит в flow: после `gaps` и после отказа на `delivery_ok`. Ветку надо пересоздавать (`-C`) и после `--abort` возвращаться на ветку прогона (F8.1).
+2. У `close` нет пути назад, когда push ветки readiness отклонён или CI закрывающего PR красный по вине работы. Сам кит называет проверку тогда «out of date», а правило «When a command fails» велит просто повторить (F3.6).
+3. Продолжение эпика: `intake` всё ещё велит «start `decisions.md`», а `plan` пишет `plan.md` с нуля. Готовые шаги и номера S<n> могут потеряться (F5.8).
+4. Правило «When a command fails»: ведущий сам повторяет команду delivery, а delivery ждёт без пробуждения. Это конфликтует с ролью delivery при обновлении, которое нельзя запустить (F5.5, F5.6).
+5. Выход из `design_ok`, когда ветка эпика не работает: «once» на шаг или на эпик, и как именно перевести эпик на базовую ветку (F7.1).
 
 ## Находки
 
 ### 1. Границы ролей
 
-Права указаны у каждой роли: plan-critic — «You change no file and commit nothing» и `read_only: true`, delivery — «you change no product code», ведущий — «you write the epic's files under `docs/epics/<key>/` and nothing else of the product». Противоречия в этих правах вынесены в критерий 5 (F5.1, F5.2, F12.1).
+Новых находок нет. Права delivery уточнены: «product code beyond resolving that merge's conflicts, and push nothing». Расхождение с `epic-files` — F5.7.
 
 ### 2. Передача между шагами
 
-- **F2.1** [high] `flows/epic.yaml:91` (state `run`)
-  > Carry out the step(s) the human just approved. The note is the human's answer at the
-  > gate: a comment binds like the plan.
-  На `plan_ok` человек утверждает «its open questions as recommended (or as you say)», то есть решает открытые вопросы. Комментарий с гейта по правилам LADO доходит только до следующего шага. Ни `run`, ни `close` не пишут ответ гейта в `decisions.md`: grep `decisions` по `run` и `close` ничего не находит. Отклонение на `step_ok` тоже не записывается (строки 129–130). Поэтому решение «как скажете» не попадёт ни в план следующих шагов, ни в итоговую таблицу решений (R5), ни в контекст после рестарта.
-  Fix: в `run`, шаг 0: «Record the human's answer at the gate in `decisions.md` (each open question with its decision) and update `plan.md` where the answer changes it; commit». То же для отклонения на `step_ok` в `review` и для `delivery_ok` в `close`. Passes: 1/3, confirmed. Проверено: `grep -n decisions flows/epic.yaml` находит только строки 33, 38, 53, 57, 118, 119 (intake, plan, review), в `run` и `close` ни одной.
+Новых находок нет. Ответы гейтов теперь пишутся в файл: `flows/epic.yaml:96` «0. Record the answer in `decisions.md`: each open question with its decision, and». `close` reads `delivery-report`, где описаны разрешения конфликтов, которые утверждает гейт.
 
 ### 3. Когда шаг готов и какой исход
 
-- **F3.1** [high] `flows/epic.yaml:93` (state `run`; также `close` :172, `agents/delivery.md:24`)
-  > 1. Merge the approved plan change: push the run's branch, open its pull request to
-  Ничего не сказано про красный CI, отказ хоста в merge или упавший push. У `run` и `close` по одному исходу. Delivery «Run the product's checks of **Checks** on the branch that will / be released», и красная проверка, даже из-за отсутствующего инструмента или Docker, доступна ему только как `gaps`, то есть как новый шаг плана (известная дыра 1). Ведущий импровизирует, а сбой окружения превращается в «шаг эпика».
-  Fix: одно правило в `epic-files`. Сбой не из-за работы (сеть, инструмент, защита ветки, нестабильный CI) — ведущий показывает человеку команду и вывод и ждёт. Delivery шлёт его ведущему через `send_message`, это не пробел. Красный CI, который вызвал сам PR плана, ведущий чинит в worktree прогона. Passes: 3/3 (влияние high по проходу 2, проходы 1 и 3 дали medium).
-
-- **F3.2** [medium] `flows/epic.yaml:153` (state `readiness`)
-  > feature needs is missing; `gaps` otherwise: note_summary is the verdict; note_body
-  У вердикта готовности нет порога. Неясно, считать ли пробелом обновление, которое здесь нельзя запустить, открытую проверку, перенесённую в релизный чеклист, мелкую тему документации. Сравните с plan-critic, где уровень blocking определён. Два worker'а дадут на одно и то же состояние `ready` и `gaps` (известная дыра 4).
-  Fix: определить пробел: пункт «done» брифа или тема чеклиста без шага, красная проверка по вине работы, обновление, которое теряет файлы пользователя. Явно сказать, что неисполнимое здесь обновление и открытые проверки — не пробел. Passes: 3/3.
-
-- **F3.3** [high] `flows/epic.yaml:123` (state `review`, с `agents/delivery.md:33`)
-  > `gaps`, its `delivery-report` names what is missing: each gap becomes a step or goes
-  > to "Later" on the human's word.
-  Когда человек отправляет все пробелы в «Later», шагов не остаётся, `review` сообщает `finish`, и `readiness` проверяет «again from the start». Delivery смотрит «What the feature needs for full use against the brief's "done" … covered by which step, or missing» и ничего не знает про «Later». Тот же пробел снова даёт `gaps`, и цикл идёт до `max_visits: 3`, после чего прогон стоит на лимите вместо гейта.
-  Fix: в `delivery.md`, Missing: «an item the human moved to "Later" (plan.md) is not a gap; list it under Later in the report». Passes: 1/3, confirmed. Цитата `delivery.md:33-34` покрывает только «covered by which step, or missing», а слово `Later` в `agents/delivery.md` grep не находит.
-
-- **F3.4** [medium] `flows/epic.yaml:73` (state `plan_review`)
-  > visit the human decides on what is still open, so on the third visit put each open
-  > finding as a question for the human.
-  > Done when every finding has an ID, a severity, its place and a quote. Report `ok`
-  > when no finding is blocking; `changes` otherwise. note_summary is the verdict and
-  Если на третьем визите остаются blocking, правило исхода даёт `changes`. Тогда `plan`, а четвёртый визит упирается в `max_visits`, и вопросы так и не доходят до `plan_ok`, где их должен решать человек. Отклонение на `plan_ok` тоже тратит визит `plan_review`.
-  Fix: «On the third visit report `ok`, with each open finding under "Questions for the human"». Passes: 3/3.
-
-- **F3.5** [medium] `flows/epic.yaml:20` (state `intake`)
-  > branch: an epic of the same feature may exist already (then ask the human
-  > whether this run continues it).
-  Не сказано, что делать при «да»: перезаписывать `brief.md` и `decisions.md` или опираться на них, отменять ли этот прогон, если эпик ведёт другой открытый прогон. Есть риск стереть память существующего эпика.
-  Fix: «If it continues: keep the key and extend the existing files, keeping every row of `decisions.md`; if an open `epic` run holds it, recommend cancelling this run». Passes: 2/3.
+- **F3.6** [high] `skills/step-review/SKILL.md:88` (state `close`, `flows/epic.yaml:195`)
+  > readiness/<key>:<epic branch>`. When the push is refused because the epic branch moved,
+  > tell the human; the readiness check is out of date.
+  Кит сам говорит, что проверка готовности тогда устарела, но у `close` единственный исход `outcomes: {closed: done}`, и пути назад в `readiness` нет. `close` отсылает каждый отказ push к `epic-files`, «When a command fails», а там «a refused push» считается сбоем вне работы: «waits until they say it is settled, and runs it again». Повторный push отклонят так же. Красный CI закрывающего PR из ветки эпика в базу, вызванный самой работой (например, разрешением конфликтов), не подходит ни под «plan pull request», ни под «readiness». Прогон застревает в `close`, и ведущий импровизирует, вплоть до force push.
+  Fix: добавить `close` исход `stale: readiness` с условием (отклонён push ветки readiness или красный CI закрывающего PR по вине работы). В step-review писать «report `stale`» вместо «tell the human». В «When a command fails» сделать исключение для этого случая. Passes: 2/3 (влияние high по проходу 3, проход 2 дал medium).
 
 ### 4. Независимая проверка
 
-План проверяет свежий `plan-critic` до `plan_ok`, работу шагов проверяет `sdlc` (reviewer и свои гейты), готовность — отдельный `delivery`. Гейты читают то, что утверждают: `plan_ok` reads `[epic-brief, plan, plan-review, step-brief]`. Непроверенный push разрешения конфликтов — F12.1.
+Новых находок нет. Push разрешений конфликтов идёт только после `delivery_ok`, это сказано и в step-review, и в ask гейта: «Nothing is pushed: the human sees the resolutions in `delivery-report` first».
 
 ### 5. Противоречия
 
-- **F5.1** [medium] `agents/supervisor.md:15`
-  > you write the epic's files under `docs/epics/<key>/` and nothing else of the product.
-  Противоречит `agents/supervisor.md:79` («`decisions.md` and move its risk into the product's release checklist as a check»), а также `skills/step-review/SKILL.md:67` и `:51`. Релизный чеклист — файл продукта. И не сказано, как такая правка попадает в базу.
-  Fix: в `epic-files`, «Changing the files», назвать релизный чеклист единственным файлом продукта, который правят ведущий и delivery, и сказать, что он идёт в PR плана. Passes: 3/3.
+- **F5.2** [low] STILL OPEN (с прошлого раза, понижена с medium) `skills/epic-files/SKILL.md:115`
+  > and folders by name. The human's checkout stays on its branch, untouched.
+  Роль ведущего теперь делает исключение (`agents/supervisor.md:46`: «the one exception is the fast-forward pull `lead-sdlc` makes»), а навык, который читают все роли, по-прежнему говорит «untouched». Ведущий, скорее всего, послушает свою роль, поэтому low.
+  Fix: «untouched, except the fast-forward pull `lead-sdlc` makes». Passes: 2/3.
 
-- **F5.2** [medium] `agents/supervisor.md:44`
-  > files"). Your own repository is the human's checkout: read it, never edit, commit in or
-  > switch its branch there.
-  lead-sdlc (sdlc 0.5.0 `agents/supervisor.md:59-61`) велит тому же ведущему после каждого `done`: «bring the base in with `git pull --ff-only`». `epic-files:100` при этом говорит «The human's checkout stays on its branch, untouched.» Какое правило главнее, не сказано, и ведущие поведут себя по-разному.
-  Fix: одна фраза в «Where you write»: fast-forward pull по lead-sdlc разрешён (или пропускается). Passes: 2/3 (влияние medium по проходу 3, проход 2 дал low).
+- **F5.5** [medium] `skills/epic-files/SKILL.md:106`
+  > outcome and no gap: `delivery` sends the command and its whole output to the lead with
+  > `send_message` and waits; the lead shows them to the human, waits until they say it is
+  > settled, and runs it again.
+  «runs it again» грамматически относится к ведущему: ведущий сам повторяет проверку, обновление или merge delivery. Так ломается разделение ролей, ведь ведущий пишет только файлы эпика. При этом нигде не сказано, что ведущий будит delivery, который «waits».
+  Fix: «…settled, then tells `delivery` with `send_message`, which runs it again; its own commands the lead runs again». Passes: 1/3, confirmed. Цитата выше и `agents/supervisor.md:15` («the product's release checklist … nothing else of the product»).
 
-- **F5.3** [medium] `agents/supervisor.md:76`
-  > they want the full answer, recommend finishing the current step and reporting `finish`
-  Условие исхода в `flows/epic.yaml:128`: «Report `finish` when the plan has no step left». Роль советует `finish` при оставшихся шагах, `do` такого не разрешает. Если ведущий всё же даст `finish`, delivery отметит оставшиеся шаги как `gaps`, и выйдет круг F3.3.
-  Fix: либо разрешить в `review` «`finish` also when the human asks for a readiness check; the steps left go to "Later" on their word», либо убрать совет из роли. Passes: 1/3, confirmed. Обе цитаты на месте (supervisor.md:76, epic.yaml:128).
+- **F5.6** [medium] `skills/epic-files/SKILL.md:104` против `agents/delivery.md:35`
+  > push or merge, branch protection, a flaky CI run, a host past its time ceiling) is no
+  `agents/delivery.md:35-36`: «docs allow only a system-wide install, there is no previous version, or the upgrade / cannot run here, do not run it: say why and what the human must run instead.» Возьмём недостающий инструмент для обновления, например нет среды контейнеров. Роль велит записать это в отчёт и идти дальше, навык велит отправить ведущему и ждать человека. От прогона к прогону worker будет вести себя по-разному.
+  Fix: в `epic-files` добавить «except where the role says what to report instead (`delivery`'s upgrade)». Passes: 1/3, confirmed. Обе цитаты на месте.
 
-- **F5.4** [medium] `skills/step-brief/SKILL.md:36`
-  > remote." `sdlc` targets an epic branch only when the task's epic has one, so the
-  Это неполная цитата аналитика sdlc 0.5.0, `agents/analyst.md:28-29`: «or the epic's branch when the tracker has epics and the task's epic has a branch on the remote». Первое условие выпало, в README:62-63 тоже. С трекером без эпиков буквальное правило аналитика даёт базу, и защита «отклонить на `design_ok`» может зациклить design. Обход ветки эпика держится на допущении, которого текст sdlc не даёт.
-  Fix: процитировать условие целиком в step-brief и README, а в README «Known limit» сказать, что с трекером без эпиков вариант ветки эпика, скорее всего, не сработает до правки sdlc. См. вопрос 1. Passes: 1/3, confirmed. Цитата `analyst.md:28-29` выше.
+- **F5.7** [medium] `skills/epic-files/SKILL.md:85`
+  > path, never in the human's checkout. Besides `docs/epics/<key>/`, the one product file
+  delivery теперь меняет и файлы продукта, когда разрешает конфликты на `readiness/<key>` (`agents/delivery.md:12`: «product code beyond resolving that merge's conflicts»). Фраза «the one product file» больше не верна: строгий читатель оставит конфликты неразрешёнными.
+  Fix: добавить «and, at readiness, `delivery`'s conflict resolutions of the base merge (`step-review`, "Epic branch")». Passes: 1/3, confirmed. Обе цитаты на месте.
+
+- **F5.8** [medium] `flows/epic.yaml:22` (states `intake`, `plan`)
+  > cancelling this run. When it continues, keep its key and extend its files:
+  В том же `do` строка 36 по-прежнему говорит «Write `docs/epics/<key>/brief.md` and start `decisions.md`», а `plan` на первом визите (строка 49) — «Write `docs/epics/<key>/plan.md` … from `epic-brief`». Про `plan.md` продолжаемого эпика ничего не сказано. План можно переписать с нуля, потеряв готовые шаги, вопреки `epic-files:58` («`S<n>` numbers never change once a step is in the tracker»). State «closed» закрытого эпика тоже не сбрасывается.
+  Fix: в intake «`plan.md` keeps its done steps and numbers; its State goes back to `plan`», строка 36 — «(when continuing, add to them)», в `plan` — «on a continued epic, extend `plan.md`». Passes: 2/3.
 
 ### 6. Дублирование
 
-- **F6.1** [low] `agents/supervisor.md:78`
-  > - **Advice they did not take** (a release before a step you recommended): record it in
-  Повторяет правило `skills/step-review/SKILL.md:69` («3. Advice the human did not take before the release: its risk goes into the release»), а не просто ссылается на него.
-  Fix: оставить «record it in `decisions.md` (`step-review`, "A release between steps")». Passes: 2/3.
+Новых находок нет. Повтор «Advice they did not take» заменён ссылкой (`agents/supervisor.md:80`). Скрипт похожих абзацев не нашёл.
 
 ### 7. Когда звать человека
 
-Решения человека проходят через три гейта и ведущего, intake спрашивает раундами, plan-critic выносит «Questions for the human», workers при нехватке настроек пишут ведущему (`sdlc-settings`: «stop and send the supervisor»). Правила для сбоя окружения нет — это F3.1, сходимость ревью плана — F3.4.
+- **F7.1** [medium] `skills/step-brief/SKILL.md:67`
+  > the base, recommend rejecting once with the brief's line 5 quoted. When the next design
+  > names the base again, `sdlc` does not take the epic branch on this tracker: put it to the
+  > human with a recommendation (switch the epic to merging into the base, or wait for
+  > `sdlc`) instead of rejecting again.
+  Не ясно, считается «once» на прогон шага или на эпик: отклонять ли снова на шаге 2. У «switch the epic to merging into the base» нет порядка действий, хотя прежние шаги уже лежат в ветке эпика (запушенной в `run` шаг 2), а `close` шаг 2 всё ещё действует «On an epic branch». «Wait for `sdlc`» оставляет прогон `task` стоять на `design_ok` без конца, а `run` ждёт, пока закончатся все прогоны.
+  Fix: «once per epic». Описать переход: на «да» человека слить ветку эпика в базу через PR, записать решение в `decisions.md`, поставить в State `Branch: base`, следующие брифы целят в базу. Для «wait» — отменить прогон (`lead-sdlc`, «At cancel»). Passes: 2/3 (влияние medium по проходу 3, проход 2 дал low).
 
 ### 8. Циклы при повторном визите
 
-Каждое состояние на цикле говорит, что меняется: `plan` («On a later visit the note says why you are back»), `plan_review` (RESOLVED / STILL OPEN, свой `plan-review` в produces), `review` (`retro` целиком, причина отклонения), `readiness` («check again from the start»). Циклы ограничены `max_visits: 3` или гейтом. Исход третьего визита — F3.4.
+- **F8.1** [high] `skills/step-review/SKILL.md:83` (state `readiness`, `max_visits: 3`)
+  > - **At readiness** (`delivery`): `git fetch origin`, `git switch -c readiness/<key>
+  В `readiness` возвращаются после `gaps` → `review` («check again from the start») и после отказа на `delivery_ok` (`rejected: readiness`). На втором визите `git switch -c` падает: ветка `readiness/<key>` уже есть. Если worker обойдёт это, перейдя на старую ветку, он проверит устаревший merge базы, и вердикт будет неверным. Путь abort в `agents/delivery.md:24` («`git merge --abort` and name the files») не возвращает на ветку прогона, так что коммит отчёта может попасть на ветку readiness. Ветку не удаляют и после `close`, а продолжение эпика с тем же ключом (`intake`) повторяет сбой.
+  Fix: `git switch -C readiness/<key> origin/<epic branch>`; в путь abort добавить «then `git switch <the run's branch>`»; в `close` после push удалить `readiness/<key>` по имени. Passes: 3/3.
+
+- **F8.2** [medium] `flows/epic.yaml:77` (state `plan_review`)
+  > when no finding is blocking; `changes` otherwise. On the third visit report `ok`
+  После исправления отказ на `plan_ok` становится штатным путём для blocking-находки, которую человек хочет исправить. Но `rejected: plan` ведёт к `plan`, а затем к четвёртому визиту `plan_review` при `max_visits: 3`. Что тогда делает ведущий и рецензирует ли критик вообще, не сказано.
+  Fix: в `plan` сказать, что после отказа, следующего за третьим ревью, ведущий исправляет план и через прогон сообщает человеку о лимите (lead-sdlc: «A run waits at a loop limit»). Или поднять `max_visits` и записать причину в чертёж. Passes: 2/3 (влияние medium по проходу 3, проход 1 дал low).
 
 ### 9. Краткость и зачем
 
-Воды и истории в промптах нет, у неочевидных правил есть причина: «so the state is on the base for the next start», «Its analyst knows nothing of the epic except what the brief says». Все роли укладываются в зелёный объём.
+Новых находок нет. Новые правила объясняют себя: «a relative path would show the human an older file», «Nothing is pushed: the human sees the resolutions in `delivery-report` first». Объём ролей зелёный (539 и 760 слов).
 
 ### 10. Описания навыков
 
-- **F10.1** [low] `skills/step-review/SKILL.md:25`
-  > | the run's talk with the human | `lado log <session> --agent <worker>` for each worker of the run (`list_agents`), and your own messages about the run | the analyst's questions, rejections at gates, trouble in the manual check, leftovers named at the end |
-  Каждый `review` запускает `lado`, но в `expects.commands` есть только `git` (известная дыра 6a). Это важно, только если `lado` может не оказаться в PATH агентов.
-  Fix: добавить `lado` в `expects.commands` и в README или написать «when `lado` is not on PATH, mark the source unavailable». Passes: 2/3.
-
-Описания `step-brief` и `step-review` ссылаются друг на друга («for reviewing a step that ended use `step-review`»). `tracker` и `sdlc-settings` объявлены в `expects.skills`, README называет кит sdlc и киты трекера.
+Новых находок нет. В описание `epic-files` добавлено, когда его применять: «when a push, CI or check fails». `lado` стал необязательным: «without `lado` on PATH, mark it unavailable».
 
 ### 11. Нейтральность к провайдеру
 
-- **F11.1** [medium] `skills/epic-files/SKILL.md:92` (также `flows/epic.yaml:54`, 35, 120)
-  > - After a commit to a file that is also an artifact (`plan`, `epic-brief`,
-  Ведущий начинает работу в checkout человека («Your own repository is the human's checkout»), а `do` говорят «write `plan` from `plan.md`». Относительный `file` в `write_artifact` разрешается от checkout, где `docs/epics/<key>/plan.md` отсутствует или устарел, и гейт показывает старый текст. `lado-kit-format` требует абсолютный путь в worktree прогона (известная дыра 3).
-  Fix: в этом пункте добавить «the lead passes the absolute path in the epic run's worktree (`flow_status`)». Passes: 1/3, confirmed. Правило `lado-kit-format`, «Artifacts»: «the lead passes the absolute path in the run's worktree (`flow_status`)». В ките этой фразы нет: grep `absolute` по `skills/ agents/ flows/` пуст.
-
-В остальном инструментов, команд и моделей конкретных CLI нет. README: «The role `plan-critic` is read-only, so the kit does not run on Codex CLI.»
+Новых находок нет. Ведущий передаёт абсолютный путь: «it passes `write_artifact` the absolute path in the epic run's worktree».
 
 ### 12. Безопасность и рамки
 
-- **F12.1** [high] `skills/step-review/SKILL.md:77` (вызывается в `review` и в `readiness`, с `agents/delivery.md:11`, `:21`)
-  > `git push origin HEAD:<epic branch>`, then `git switch <the run's branch>`. On a conflict,
-  Delivery по `delivery.md:21` («the checks, and list each file and how you resolved it in the report; a conflict that») сам разрешает конфликты в коде продукта и пушит их в общую ветку эпика без гейта, с правилом «Never force-push». Человек видит разрешение только на `delivery_ok`, уже после push, а `delivery.md:11-12` говорит «you change no product code». Ошибочное разрешение не откатить, последующие прогоны `task` строятся на нём.
-  Fix: в `readiness` делать merge локально, разрешение описывать в `delivery-report`, пушить в `close` после `delivery_ok` и назвать это в ask гейта. Строку 11 поправить: «no product code beyond resolving merge conflicts». Passes: 3/3 (влияние high по проходу 2).
-
-- **F12.2** [high] `agents/delivery.md:28`
-  > 4. **Upgrade.** Install the previous released version as the product's install docs say,
-  Документация по установке часто ставит системно: бинарь в PATH, глобальные образы, сервис, данные в домашней папке. Так можно перезаписать установку и данные самого человека без его согласия. Ограничение `delivery.md:39` («Work only in the run's worktree and in folders you create for the upgrade») конфликтует с «as the product's install docs say», и где создавать папки, не сказано.
-  Fix: ставить только в префикс, папку или контейнер, которые создал сам worker (во временной папке). Если документация допускает только системную установку, не запускать её, а написать в отчёте, что должен выполнить человек. Passes: 3/3 (влияние high по проходу 2).
-
-Merge PR плана и закрывающего PR, создание задач трекера идут только после гейтов: «The lead then merges the plan's pull request after green CI, creates the step's tracker task and starts its run of `task`».
+Новых находок нет. Обновление ставится в своё место: «container you name, never system-wide or over the human's own install». Push ветки эпика с разрешениями конфликтов идёт после `delivery_ok`, это сказано в ask гейта. Push в ветку эпика после каждого шага (lead, `review`) остался без отдельного гейта, но так задумано: стратегию выбрал человек (R13), и при конфликте он идёт к человеку.
 
 ## Известные дыры
 
 | Известная дыра | Находка или как кит с ней справляется |
 |---|---|
-| 1. Красная проверка возвращается без учёта окружения | F3.1 |
-| 2. Работа вне flow, merge без гейта | merge — только после гейтов (ask `plan_ok`, `step_ok`, `delivery_ok`); «Start a run of `task` only for a step the human approved at `plan_ok` or `step_ok`». Push в ветку эпика без гейта — F12.1; правка релизного чеклиста вне шага — F5.1 |
-| 3. Путь вне worktree прогона | F11.1 (относительный `file` ведущего), F12.2 (папки для обновления). Иначе: «Edit and commit only in the epic run's worktree (the path `flow_status` gives)» |
-| 4. Вердикт без порога важности | plan-critic: «Report `ok` when no finding is blocking» + уровни в `plan-critic.md:46-48`; для `readiness` — F3.2 |
-| 5. Навык зависимости пишет или спрашивает, где роли нельзя | справляется: plan-critic не получает `tracker`; `sdlc-settings` только пишет ведущему; plan-critic: «You change no file and commit nothing» |
-| 6. Команды не совпадают с `expects.commands` | (a) F10.1 (`lado`); (b) `gh` только условно («with `gh`: …»), в expects его нет; (c) `expects commands: git` при `lado: ">=0.34"`, предупреждения нет |
-| 7. Read-only роли не совпадают с тем, что делают | (a) единственная проверяющая роль, `plan-critic`, имеет `read_only: true`; (b) `delivery` коммитит и не read-only; (c) `dependencies.lado: ">=0.34"`; (d) README: «does not run on Codex CLI» |
+| 1. Красная проверка возвращается без учёта окружения | в основном решено: `epic-files:101` «First tell whether the work caused it». Остались `close` (F3.6) и согласование с ролью delivery (F5.5, F5.6) |
+| 2. Работа вне flow, merge без гейта | каждый merge и push с разрешениями конфликтов идёт после гейта: ask `delivery_ok` «on an epic branch it first pushes the base merge the report describes» |
+| 3. Путь вне worktree прогона | решено: «the absolute path in the epic run's worktree»; папка для обновления — «under the system's temporary folder» |
+| 4. Вердикт без порога важности | решено: в `agents/delivery.md:45` «**A gap** is: …»; plan-critic — «Report `ok` when no finding is blocking» |
+| 5. Навык зависимости пишет или спрашивает, где роли нельзя | без изменений, справляется: delivery пишет ведущему через `send_message`, plan-critic ничего не меняет |
+| 6. Команды не совпадают с `expects.commands` | решено: `lado` необязателен («without `lado` on PATH, mark it unavailable»), `expects commands: git` |
+| 7. Read-only роли не совпадают с тем, что делают | без изменений, справляется: `plan-critic` с `read_only: true`, delivery коммитит и не read-only, `lado: ">=0.34"`, README про Codex CLI |
 
 ## Не прослежено
 
-Нет. Каждая роль, шаг, гейт и навык названы в разделе 3 чертежа с требованиями R. Обе жёлтые меры (7 шагов, 3 гейта) обоснованы в разделе 4. `--compare` печатает «same as the plan in BLUEPRINT.md».
+Нет. Изменения не добавили ни роли, ни шага, ни гейта, ни навыка. Обе жёлтые меры обоснованы в чертеже, раздел 4 (в нём обновлены только числа слов). `--compare` печатает «same as the plan in BLUEPRINT.md».
+
+## Прежние находки
+
+| Находка | Статус | Чем подтверждено |
+|---|---|---|
+| F2.1 ответы гейтов не пишутся | RESOLVED | `flows/epic.yaml:96` «0. Record the answer in `decisions.md`»; :139 «record it in `decisions.md`, revise»; :182 «Record their answer in `decisions.md`» |
+| F3.1 сбой окружения против работы | RESOLVED | `epic-files:101` «First tell whether the work caused it»; `run` :111 «this step has no outcome for it». Остаток у `close` — F3.6 |
+| F3.2 нет порога для `gaps` | RESOLVED | `agents/delivery.md:45` «**A gap** is: …»; `flows/epic.yaml:163` «gap as your role defines it» |
+| F3.3 пробел из «Later» возвращается | RESOLVED | `agents/delivery.md:39` «An item the human moved to "Later" in `plan.md` is not missing» |
+| F3.4 третий визит plan_review | RESOLVED | `flows/epic.yaml:77` «On the third visit report `ok`». Остаток (отказ на `plan_ok` после третьего визита) — F8.2 |
+| F3.5 эпик продолжается | RESOLVED | `flows/epic.yaml:22` «keep its key and extend its files». Неполнота для `plan.md` — F5.8 |
+| F5.1 релизный чеклист | RESOLVED | `agents/supervisor.md:15` «and the product's release checklist»; `epic-files:85`. Новое расхождение — F5.7 |
+| F5.2 checkout и `git pull --ff-only` | STILL OPEN (low) | роль исправлена (`supervisor.md:46`), `epic-files:115` «untouched» осталось |
+| F5.3 `finish` посреди эпика | RESOLVED | `flows/epic.yaml:137` «when the human asks for the readiness check with steps left»; `supervisor.md:78` «offer the readiness check» |
+| F5.4 неполная цитата аналитика | RESOLVED | `README.md:63` и `step-brief` «tracker has epics and the task's epic has a branch on the remote». Новое — F7.1 |
+| F6.1 повтор «Advice» | RESOLVED | `supervisor.md:80` «as `step-review` says ("A release between steps", 3)» |
+| F10.1 `lado` вне expects | RESOLVED | `step-review:25` «without `lado` on PATH, mark it unavailable» |
+| F11.1 относительный путь | RESOLVED | `epic-files:96` «passes `write_artifact` the absolute path in the epic run's» |
+| F12.1 push без гейта | RESOLVED | `step-review:85` «Nothing is pushed»; ask `delivery_ok`. Новое — F8.1, F3.6 |
+| F12.2 системная установка | RESOLVED | `agents/delivery.md:32` «never system-wide or over the human's own install» |
+
+## Вырезанные правила
+
+| Удалённое правило (файл:строка на 42fe6f6) | Где оно сейчас |
+|---|---|
+| `agents/delivery.md:20-21` «Resolve a conflict … run the checks» | `agents/delivery.md:26` (проверки «on what will be released (the readiness branch, or the base)») |
+| `agents/delivery.md:28` «Install the previous released version as the product's install docs say» | `agents/delivery.md:30-32`, с ограничением места |
+| `agents/delivery.md:24-25` «on the branch that will be released» | `agents/delivery.md:26-27` |
+| `flows/epic.yaml:72-74` «After the third visit the human decides on what is still open» | `flows/epic.yaml:77-79` |
+| `flows/epic.yaml:152-154` «Report `ready` when nothing the feature needs is missing» | `flows/epic.yaml:162-163` + `agents/delivery.md:45` |
+| `flows/epic.yaml:128` «Report `finish` when the plan has no step left» | `flows/epic.yaml:136-137`, расширено |
+| `flows/epic.yaml:171-172` (`close`) «bring the base in (`step-review`, "Epic branch")» перед закрывающим PR | частично: база вливается на `readiness` (`step-review:83`), в `close` повторно не вливается. Если база ушла вперёд, это ловит CI закрывающего PR, а для него нет пути назад — см. F3.6 |
+| `flows/epic.yaml:160-162` ask `delivery_ok` | `flows/epic.yaml` ask `delivery_ok`, переписан с push |
+| `skills/step-review/SKILL.md:74-80` «Epic branch» (одна процедура с push и разрешением конфликтов у delivery) | `skills/step-review/SKILL.md:72-89`, три пункта: after every step, at readiness, at close; «Never force-push» — строка 74 |
+| `skills/step-review/SKILL.md:69-70` «Advice the human did not take…» | `skills/step-review/SKILL.md:69-71` (с «record it in `decisions.md`») |
+| `agents/supervisor.md:78-80` «Advice they did not take … instead of arguing» | `skills/step-review/SKILL.md:69-71` («instead of arguing» сохранено) |
+| `agents/supervisor.md:76-77` «recommend finishing the current step and reporting `finish`» | `agents/supervisor.md:78-79` («offer the readiness check») |
+| `skills/step-brief/SKILL.md:64-66` «check the first step's `design` at `design_ok` … recommend rejecting» | `skills/step-brief/SKILL.md:65-70` (каждый шаг, отказ один раз) |
+| `README.md:62-65` Known limit | `README.md:62-68` |
+
+Потерянных правил нет.
+
+## Пропущено раньше
+
+Нет.
 
 ## Вопросы человеку
 
-1. Вариант «ветка эпика» не проверен, и по тексту sdlc 0.5.0 он, скорее всего, не работает с трекером без эпиков (F5.4). Оставить его в 0.1.0 с предупреждением в README или убрать до правки sdlc (явная целевая ветка, задача для kit-sdlc)? Рекомендация: оставить, но процитировать условие аналитика целиком и предупредить, что с трекером без эпиков вариант сейчас не работает. Задачу на kit-sdlc завести.
+1. Вариант «ветка эпика» в 0.1.0 оставлен с честным предупреждением в README (как рекомендовал критик). Решение и задача на kit-sdlc о явной целевой ветке остаются за человеком. Рекомендация: оставить и завести задачу на kit-sdlc.
 
 ## Найдено по пути
 
