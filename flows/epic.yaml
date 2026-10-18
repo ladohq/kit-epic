@@ -1,0 +1,180 @@
+name: epic
+description: >-
+  One epic from its statement to delivery: the lead checks the statement against the
+  readiness checklist and asks the human what is missing, writes a plan of small
+  verifiable steps with the first step's brief, a fresh critic reviews them, the human
+  approves; then, step by step, the lead creates the step's tracker task, runs it as a
+  run of the flow `task` of `sdlc`, reviews its results, revises the plan and drafts the
+  next step for the human's yes; when no step is left, a delivery worker checks release
+  readiness and writes the final report, and on the human's yes the lead closes the epic.
+  The run's task is the human's statement of the feature, from one line to a full
+  specification.
+start: intake
+states:
+  intake:
+    agent: supervisor
+    produces: [epic-brief]
+    do: |
+      Take the run's task, the human's statement of the feature, and make it ready to plan.
+      1. Read the statement, the code and docs it touches, and `docs/epics/` on the base
+         branch: an epic of the same feature may exist already (then ask the human
+         whether this run continues it).
+      2. Assess it against the readiness checklist of `epic-files`: for each topic, covered,
+         missing, or not relevant with a reason.
+      3. Ask the human what is missing, in rounds: one message per round, numbered
+         questions, each with what you found and your recommended answer. Ask what only
+         the human can know; look the rest up yourself.
+      4. Settle with them the epic's key (`epic-files`, "The key") and the branch
+         strategy: by default every step merges into the base branch and leaves the
+         product working, unfinished parts hidden; or an epic branch, named by the
+         settings' pattern (`sdlc-settings`, **Git**), merged into the base by a final
+         pull request. Ask which; recommend the default unless steps cannot each leave the
+         product working.
+      Write `docs/epics/<key>/brief.md` and start `decisions.md` with every decision of
+      the rounds (`epic-files`), commit both in the run's worktree, then write `epic-brief`
+      from `brief.md`.
+      Done when every checklist topic has a verdict, the human answered every round, and
+      the files are committed. Report `ready`: note_summary is the key and the verdict
+      ("ready to plan" or "research first: <what is unknown>"); note_body the decisions
+      taken and the questions left open on purpose.
+    outcomes: {ready: plan}
+  plan:
+    agent: supervisor
+    reads: [epic-brief, plan-review]
+    produces: [plan, step-brief]
+    do: |
+      Write `docs/epics/<key>/plan.md` (`epic-files`, "plan.md") from `epic-brief`:
+      - small steps, each with its check and size; a walking skeleton (the thinnest end-to-
+        end path, checked in CI) as early as it can be;
+      - research first when the brief says data is missing: a step whose result is a
+        research document with checks and difficulties; a small feature is one step;
+      - mark steps that could run two at once and the files each touches;
+      - the open questions with your recommendation, and "Later".
+      Then draft the first step with `step-brief`. Commit `plan.md` and `decisions.md` in
+      the run's worktree and write `plan` from `plan.md`; write `step-brief` whole.
+      On a later visit the note says why you are back: the critic's `plan-review` (fix or
+      answer each finding, by its ID) or the human's reason for rejecting at `plan_ok`
+      (quote it at the top of `plan`'s State, record it in `decisions.md`). Revise the
+      committed files, not a version from memory, and write both artifacts whole again.
+      Done when every step has a check, the first step's draft is complete, and the files
+      are committed. Report `ready`: note_summary is the number of steps and the first
+      step's title; note_body what changed since the last visit.
+    outcomes: {ready: plan_review}
+  plan_review:
+    agent: plan-critic
+    max_visits: 3
+    reads: [epic-brief, plan, step-brief]
+    produces: [plan-review]
+    do: |
+      Review the brief, the plan and the first step's draft as your role describes, and
+      write `plan-review` whole.
+      On a later visit your previous review is your `plan-review` artifact: mark each of
+      its findings RESOLVED or STILL OPEN first, then look for new ones. After the third
+      visit the human decides on what is still open, so on the third visit put each open
+      finding as a question for the human.
+      Done when every finding has an ID, a severity, its place and a quote. Report `ok`
+      when no finding is blocking; `changes` otherwise. note_summary is the verdict and
+      the counts by severity; note_body the blocking findings by ID.
+    outcomes: {ok: plan_ok, changes: plan}
+  plan_ok:
+    gate: approval
+    reads: [epic-brief, plan, plan-review, step-brief]
+    ask: >-
+      Approve the plan, its open questions as recommended (or as you say), and the first
+      step? The lead then merges the plan's pull request after green CI, creates the
+      step's tracker task and starts its run of `task`.
+    outcomes: {approved: run, rejected: plan}
+  run:
+    agent: supervisor
+    reads: [plan, step-brief]
+    do: |
+      Carry out the step(s) the human just approved. The note is the human's answer at the
+      gate: a comment binds like the plan.
+      1. Merge the approved plan change: push the run's branch, open its pull request to
+         the base branch, wait for green CI and merge it (`epic-files`, "Changing the
+         files").
+      2. On an epic branch, when it does not exist on the remote yet: create it from the
+         base and push it.
+      3. For each approved step, create its tracker task from `step-brief` with `tracker`
+         (this gate is the human's "yes, create"), linked to the epic's tracker task when
+         the epic has one, and check the write (`sdlc-settings`, "Writing to the
+         tracker"). Start its run of `task` (`step-brief`, "Starting the step's run").
+         Mark the step in `plan.md` "in progress" with the key and the run, and commit.
+      4. While the runs go, lead them as your role says ("While a step runs").
+      Done when every run of `task` you started here has ended (done, dropped or
+      cancelled). Report `done`: note_summary is each step with its key and how its run
+      ended; note_body the pull requests, what the human said at the gates, and anything
+      the review must look at first.
+    outcomes: {done: review}
+  review:
+    agent: supervisor
+    reads: [plan, step-brief, delivery-report]
+    produces: [retro]
+    do: |
+      Review the step(s) that just ended and revise the plan, with `step-review`: read
+      every fixed source, apply the revision techniques, run the routines it names when
+      they apply (a release since the last review, an epic branch).
+      Write `retro` whole: per source what it gave, the plan changes with their technique
+      and reason, the decisions recorded, the open checks and their events. Update
+      `plan.md` (State, the step's status, leftovers, "Later") and `decisions.md`, commit
+      them, and write `plan` from `plan.md` again.
+      When a step is left, draft it (or two, only when they touch different files) with
+      `step-brief` and write `step-brief` whole. When you come back from `readiness` with
+      `gaps`, its `delivery-report` names what is missing: each gap becomes a step or goes
+      to "Later" on the human's word.
+      Done when every source is read or marked unavailable with the reason, and the files
+      are committed. Report `next` with the revision and the next step's draft for the
+      human's yes: note_summary is the step reviewed and the next one; note_body the plan
+      changes and your recommendation. Report `finish` when the plan has no step left;
+      note_summary says so. A rejection at `step_ok` brings you back with the human's
+      reason: revise as they say and write `retro`, `plan` and `step-brief` again.
+    outcomes: {next: step_ok, finish: readiness}
+  step_ok:
+    gate: approval
+    reads: [retro, plan, step-brief]
+    ask: >-
+      Approve the plan's revision and the next step? The lead then merges the plan's pull
+      request after green CI, creates the step's tracker task and starts its run of `task`.
+    outcomes: {approved: run, rejected: review}
+  readiness:
+    agent: delivery
+    max_visits: 3
+    reads: [epic-brief, plan, retro]
+    produces: [delivery-report]
+    do: |
+      Check whether the epic's result is ready to release, as your role describes, and
+      write `docs/epics/<key>/report.md` (`epic-files`, "report.md").
+      On a later visit after `gaps` the steps the review added have ended: check again
+      from the start, not only the gaps; after a rejection at `delivery_ok` the note is the
+      human's reason: quote it at the top of the report and answer it.
+      Done when every part of the report is filled from evidence (a command and its output,
+      a source by name) or says why it cannot be, and the report is committed in the run's
+      worktree; then write `delivery-report` from it. Report `ready` when nothing the
+      feature needs is missing; `gaps` otherwise: note_summary is the verdict; note_body
+      each gap with its evidence.
+    outcomes: {ready: delivery_ok, gaps: review}
+  delivery_ok:
+    gate: approval
+    reads: [delivery-report, plan]
+    ask: >-
+      Accept the epic as delivered? The lead merges the closing pull request (on an epic
+      branch, the epic branch into the base), marks the plan closed and closes the epic's
+      tracker task when it has one. Releasing the product stays yours.
+    outcomes: {approved: close, rejected: readiness}
+  close:
+    agent: supervisor
+    reads: [delivery-report]
+    do: |
+      Close the epic the human accepted; their comment at the gate binds.
+      1. Mark `plan.md` closed (State: "closed", the date, a link to `report.md`) and
+         commit with the report in the run's worktree; merge it as a plan change.
+      2. On an epic branch: bring the base in (`step-review`, "Epic branch"), open the
+         pull request from the epic branch into the base, wait for green CI and merge it.
+      3. When the epic has a tracker task, post the report's summary on it and move it
+         to the status that means done, with `tracker`.
+      Done when the pull requests are merged and the tracker shows the writes. Report
+      `closed`: note_summary is the merged pull requests; note_body what is left for the
+      human (the release, the open checks in the release checklist).
+    outcomes: {closed: done}
+  done:
+    end: true
