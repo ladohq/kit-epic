@@ -76,7 +76,10 @@ Sources: the human's answers in session `kit-epic` (interview rounds 1–3, arti
 - **R13** The branch strategy is chosen when the epic starts: by default every step merges
   into the base branch and leaves the product working, unfinished parts hidden; on the
   human's choice an epic branch, into which the lead brings the base branch after every
-  step, merged into the base by a final pull request. *Source:* round 3, Q3; research §4.4.
+  step, merged into the base by a final pull request. Choosing the epic branch is the
+  human's yes to the lead creating it on the remote and pushing the base into it after
+  every step; the question at intake says so. *Source:* round 3, Q3; research §4.4;
+  triage of `improve/epic`, answer to #5 (F12.2, F12.3).
 - **R14** One step at a time by default; two at once only on the human's yes and only when
   they touch different files; merges one at a time, each after its branch has the latest
   base. *Source:* round 3, Q4; human V8.
@@ -98,6 +101,16 @@ Decisions of the interview recorded here:
   (R5, R8) and asked of LADO later (critique §5).
 - Both `epic` and `sdlc` have a supervisor, so LADO's built-in supervisor leads with the
   lead skills `lead-epic` and `lead-sdlc` (LADO 0.40.0, `kits.py`); this is intended.
+- `close` may send the result back to `readiness` (`stale`) when the approved result
+  cannot be merged as it is; accepted at the triage of `improve/epic` (answer to #5,
+  report `kit-reports/epic-0.1.0-2026-10-18.md`, F3.1).
+- The pushes to an epic branch get no gate of their own: the human's choice of the
+  strategy at intake covers them, so the gates stay at three (F12.2, F12.3).
+- The run's branch is put on the base by `git reset --keep` only right after the plan
+  pull request merged and only with no unmerged commit on it; otherwise the base is
+  merged in, so no decision row is lost (F12.1).
+- The epic-branch option stays unverified in 0.1.0 (README, "Known limit"); an explicit
+  target branch for `sdlc` is a backlog item of this repository, not a part of this kit.
 
 ## 2. Starting point
 
@@ -195,7 +208,7 @@ back to `review` as a new step.
 | `step-review` | skill | R9, R10, R12, R13 | The fixed sources and where each is, the plan-revision techniques with their journal examples, recurring traps between steps, the release-between-steps routine, bringing the base into an epic branch. |
 | `tracker` | skill of another kit (expects) | R6, R15 | Creates and reads the step tasks on any tracker; `expects.skills`, brought by a tracker kit (e.g. `tracker-yougile`), as `sdlc` does. |
 | `sdlc-settings` | skill of another kit (expects) | R13, R17 | The project's base branch, epic branch naming, code host and its CLI, chat language, from `.lado/sdlc.md`; `expects.skills`, brought by `sdlc`. Using it, not a copy, keeps one source of the project's settings and makes a session without `sdlc` fail to start, which is right: the steps need `sdlc`. |
-| `git` | command (expects) | R10, R13 | The lead and `delivery` run it on every project (plan pull requests, bringing the base in); `expects.commands`. The code host's CLI (`gh`) comes from `sdlc-settings`, checked by the text. |
+| `git` | command (expects) | R10, R13 | The lead and `delivery` run it on every project (plan pull requests, bringing the base in); `expects.commands`. The code host and its CLI (e.g. `gh`) come from `sdlc-settings` (**Git**), which `epic-files` names (F11.1). |
 
 The flow `task` of `sdlc` is not part of this kit; its README gives the start command
 with `--kit sdlc` and `--kit <tracker kit>`.
@@ -246,3 +259,8 @@ Similar paragraphs: none. Overall: yellow.
 
 | Date | Version | Change | ← Fact (session, run, metric or report) |
 |---|---|---|---|
+| 2026-10-18 | 0.1.0 | `close` gets the outcome `stale: readiness`, with its condition in `close`, `step-review` "At close" and the exception in `epic-files` "When a command fails" | `kit-reports/epic-0.1.0-2026-10-18.md`, F3.1 |
+| 2026-10-18 | 0.1.0 | `git reset --keep` only right after the plan pull request merged and with no unmerged commit, else merge the base; never at readiness; the run's remote branch is deleted after the plan pull request merged; `delivery` checks the base on a detached `origin/<base>` | same report, F12.1, F3.3, F4.1 |
+| 2026-10-18 | 0.1.0 | The intake question on the branch strategy names creating the epic branch on the remote and the push after every step | same report, F12.2, F12.3 |
+| 2026-10-18 | 0.1.0 | Plan changes from a thematic audit wait for the next gate's plan pull request; a paused epic reports `next` with no new step; a later `readiness` marks earlier gaps RESOLVED or STILL OPEN | same report, F5.1, F3.2, F8.1 |
+| 2026-10-18 | 0.1.0 | How to find the epic's folder after a lost context; duplicated rules replaced by references; the code host's tool from `sdlc-settings` | same report, F2.1, F6.1, F6.2, F6.3, F11.1 |
