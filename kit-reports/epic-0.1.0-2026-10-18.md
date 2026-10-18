@@ -2,10 +2,10 @@
 
 - Дата: 2026-10-18
 - Кит: корень worktree прогона `improve/epic` (`.lado/worktrees/kit-epic/improve-epic`), путь дан шагом
-- Коммит: 49eb27c
+- Коммит: 97365c0
 - Оценил: критик kit-builder (слои a и b)
-- Режим: повторная оценка, второй визит `evaluate`, относительно предыдущего отчёта (этот же файл, коммит 7619f57, кит на 6651bcf). База — коммит, который план называет: `git diff e9b37a0 -- kit.yaml README.md BLUEPRINT.md agents flows skills`. Последний цикл исправлений — `git diff 7619f57`.
-- Проходы: три прохода по изменённому тексту и его окружению. Проход 1 сделал сам критик (по последнему diff по порядку). Проходы 2 (начало с `close`, `readiness`, `review`, `run`) и 3 (начало с `epic-files`) сделали свежие независимые субагенты; у них были оба diff, рубрика и зависимые тексты sdlc 0.5.0, но не прежний отчёт. Отдельный субагент параллельно сделал полный проход по 6 файлам, которые затронул diff; он воспроизвёл squash-слияние в scratchpad. Проверку вырезанных правил критик провёл сам, по `git diff --word-diff` и таблице автора. Находки одного прохода: отброшено 2, оставлена как подтверждённая 1. Находки полного прохода: 1 вынесена в «Пропущено раньше», остальные совпали с находками проходов.
+- Режим: повторная оценка, третий визит `evaluate`, относительно предыдущего отчёта (этот же файл, коммит ba7736c, кит на 49eb27c). База — коммит, который называет план: `git diff e9b37a0 -- kit.yaml README.md BLUEPRINT.md agents flows skills`. Последний цикл исправлений — `git diff ba7736c`.
+- Проходы: три прохода по изменённому тексту и его окружению. Проход 1 — сам критик, по последнему diff по порядку. Проход 2 — свежий субагент, начало с flow. Проход 3 — свежий субагент, начало с навыков. У субагентов были оба diff, рубрика и зависимые тексты sdlc 0.5.0, но не прежний отчёт. Проходы не дали ни одной общей находки: проход 1 не нашёл ничего, проходы 2 и 3 — по две разные. Все находки одного прохода проверены по файлам и оставлены как подтверждённые (4), отброшенных нет. Полный проход по 7 файлам, которые затронул diff (`kit-rubric`, «Re-evaluation» 5), сделал отдельный субагент. Его находки подтверждены по файлам: 4 — в изменённом тексте (2 совпали с находками проходов), 2 — в «Пропущено раньше». Проверку вырезанных правил критик провёл сам.
 
 Находки — кандидаты, которые взвешивает человек. Это не оценка «сдал / не сдал».
 
@@ -16,9 +16,9 @@
 | a. `lado kits check` | OK; 0 предупреждений |
 | a. Бюджет | жёлтый: шагов в flow 7, гейтов 3. Обе меры обоснованы в BLUEPRINT.md, раздел 4 |
 | a. Flows | нарисован 1; совпадает со скелетом чертежа |
-| b. Рубрика | 7 находок в изменённом тексте (2 high, 3 medium, 2 low), из них 1 STILL OPEN с прошлого раза (F3.1); без находок 6 критериев из 12. Из 9 прежних находок 8 RESOLVED, 1 STILL OPEN; в «Пропущено раньше» 2 |
-| Охват | повторная оценка изменённого текста с полным проходом по 6 файлам, которые затронул diff |
-| Правило остановки | не выполнено: 2 high, 3 medium. Это совет для гейта релиза, а не запрет |
+| b. Рубрика | 7 находок в изменённом тексте (0 high, 4 medium, 3 low); без находок 8 критериев из 12 (1, 2, 4, 5, 9, 10, 11, 12). Из 7 прежних находок 7 RESOLVED; в «Пропущено раньше» 4 (2 новые, 2 прежние) |
+| Охват | повторная оценка изменённого текста с полным проходом по 7 файлам, которые затронул diff |
+| Правило остановки | не выполнено: 0 high, 4 medium. Это совет для гейта релиза, а не запрет |
 
 Счёт относится только к тому, что названо в строке «Охват». Его нельзя сравнивать со счётом полной оценки.
 
@@ -69,154 +69,155 @@ same as the plan in BLUEPRINT.md
 
 ## Исправить в первую очередь
 
-1. Пауза: `step-brief` переписывается одной строкой, и возобновлённый шаг стартует без брифа, без рамки и без целевой ветки. Бриф шага надо сохранить под строкой паузы (F2.2).
-2. `close` на лимите `readiness`: «do not report `stale` … stay in `close`» не оставляет выхода. Надо сообщать `stale`: LADO сам держит прогон на лимите, человек выбирает `continue` или `cancel` (F7.2).
-3. Пауза: у статуса «planned» в шаблоне `plan.md` нет места для ключа, поэтому `run` всё равно создаст вторую задачу в трекере. Нужен статус `planned (<KEY>, paused)` (F3.1).
-4. Исключение `stale` в `epic-files` стоит без условия «from the work» и в списке причин вне работы. Сбой CI посреди прогона подходит и под «no outcome», и под `stale`. Нужно условие или ссылка на `close` (F5.2).
-5. Правило конфликта «keep the rows of both sides» годится для `decisions.md`, но не для `plan.md` (F3.4).
+Блокирующих находок нет. Если будет ещё один круг, то начать с этих:
+
+1. `stale` не покрывает PR из ветки эпика в базу, который конфликтует, потому что база ушла вперёд, пока шёл `delivery_ok`. Прогон ждёт человека, а нужен свежий `readiness` (F3.5).
+2. На паузе и на лимите `readiness` рекомендуют `cancel`, но коммиты, которые есть только на ветке прогона (ключ шага, строки решений, пауза), при отмене теряются (F7.4).
+3. После `continue` за лимитом правило третьего визита `readiness` («report `ready` whatever is open») неясно для четвёртого визита, и красный PR не превращается в шаг-исправление (F8.4).
+4. Когда советовать `continue`, а когда `cancel` на лимите в `close`, не сказано (F7.3).
 
 ## Находки
 
 ### 1. Границы ролей
 
-Новых находок нет. Аудит не трогает worktree, пока там работает delivery: `agents/supervisor.md:86-88` «Change the worktree only while / the run is in your step or at a gate». Все шаги `close` выполняет ведущий, delivery «push nothing».
+Новых находок нет. Возобновлённый шаг, повторное использование ключа и слияние PR из ветки эпика делает только ведущий. Права delivery не менялись.
 
 ### 2. Передача между шагами
 
-- **F2.2** [high] `flows/epic.yaml:139` (state `review` → `step_ok` → `run`)
-  >       `step-brief` whole as "No step proposed: the epic is paused (<why>); approving
-  На паузе `step-brief` целиком заменяют этой строкой, и бриф шага S<n> пропадает. После «да» на `step_ok` шаг `run` запускает возобновлённый шаг по `step-brief` (`:114` «Start its run of `task` (`step-brief`, "Starting the step's run")»), то есть «with the task text: the tracker key, then the brief whole» (`skills/step-brief/SKILL.md:64`). Аналитик `task` получает строку о паузе: без рамки, порогов, постоянных правил и строки 5 о целевой ветке. А пауза случилась именно из-за целевой ветки, так что возобновлённый шаг снова нацелится на базу. Прогон идёт не туда.
-  Fix: на паузе писать `step-brief` целиком так: строка паузы, под ней черновик задачи и бриф шага S<n> без сокращений. В `run` шаг 3 сказать, что возобновлённый шаг стартует с этим брифом. Passes: 2/3 и полный проход (проходы 2 и 3; проход 1 её пропустил).
+Новых находок нет. Бриф шага на паузе идёт в артефакте: `flows/epic.yaml:140-141` «then S<n>'s task draft and brief in full, / which its resumed run starts with», и `run` читает `step-brief`.
 
 ### 3. Когда шаг готов и какой исход
 
-- **F3.1** [medium] STILL OPEN (с прошлого раза; исправление неполное) `flows/epic.yaml:110`, с `skills/epic-files/SKILL.md:47`
-  >       3. For each approved step, take its tracker key from `plan.md` when it has one (a
-  > Status: planned | in progress (<KEY>, run <name>) | done (<KEY>, PR <link>) |
-  Ключ ищут только в `plan.md`. Но пауза переводит шаг «back to "planned"» (`skills/step-brief/SKILL.md:74`), а у статуса «planned» в шаблоне нет места для ключа. Ведущий, который следует шаблону, потеряет ключ, и `run` шаг 3 всё равно создаст вторую задачу в трекере. Это ровно та ошибка, которую исправление должно было закрыть. Ask `step_ok` (`:157-158`) тоже по-прежнему обещает «creates the step's tracker task».
-  Fix: в шаблон добавить `planned (<KEY>, paused)`, в step-brief «Wait for `sdlc`» — «back to "planned" with its key», в ask `step_ok` — «(or reuses the paused step's)». Passes: 3/3 и полный проход (влияние medium по проходам 2, 3 и полному, проход 1 дал low).
+- **F3.5** [medium] `flows/epic.yaml:214` (state `close`)
+  >       in step 2 the push of the readiness branch is refused because the epic branch moved,
+  `stale` покрывает отказ push и красный CI, но не случай, когда база ушла вперёд, пока ждали `delivery_ok`. Тогда PR из ветки эпика в базу конфликтует или отклоняется («branch is behind»). `epic-files:114` относит это к причинам вне работы («push or merge, branch protection, a flaky CI run…»), и ведущий ждёт человека. А для решения нужен merge базы с разрешением конфликтов, который ведущему делать нельзя и который сделал бы свежий `readiness`. Чертёж прямо называет этот случай причиной для `stale` («cannot be merged as it is», `BLUEPRINT.md:205`).
+  Fix: добавить к условию `stale` «or the pull request cannot merge because the base moved (a conflict, or behind a protected base)». Passes: full pass, confirmed.
 
-- **F3.4** [medium] `skills/epic-files/SKILL.md:100`
-  >   never reset in `readiness`. On a merge conflict in the epic's files keep the rows of
-  «Keep the rows of both sides» годится для `decisions.md`. Но у `plan.md` один блок State и одна строка Status на шаг. Если оставить обе стороны, получатся два `Phase:` или два статуса одного шага («in progress» и «done»). А State ведущий читает первым при каждом старте.
-  Fix: «in `decisions.md` keep the rows of both sides (newest last); in `plan.md` take the newer side and check it against `decisions.md`; in any other file `git merge --abort` and tell the human». Passes: 2/3 (влияние medium по проходу 3, проход 2 дал low).
+- **F3.7** [low] `skills/epic-files/SKILL.md:101`
+  >   both sides (newest last); in `plan.md` take the newer side and check it against
+  «The newer side» не определена. Merge идёт, только когда на ветке прогона есть неслитые коммиты, так что свежий State и статусы обычно на её стороне («ours»). Агент может понять «newer» как только что полученную базу и выбросить именно то, от чего предостерегает строка 99. Сверка с `decisions.md` статусы не вернёт.
+  Fix: «in `plan.md` keep the run's branch's side, then add steps the base's side has». Passes: 1/3, confirmed. Строка 99 «would drop commits not on the base yet (rows of `decisions.md`, statuses)» стоит рядом, а статусов в `decisions.md` нет (`epic-files`, «decisions.md»: только решения).
 
 ### 4. Независимая проверка
 
-Новых находок нет. Ветка эпика вливается в базу только после `delivery_ok`, а «closed» появляется лишь после неё: `flows/epic.yaml:201-202` «This comes before step 3, / so the base never says "closed" for a result that is not on it».
+Новых находок нет. После `stale` delivery проверяет заново, и человек одобряет снова на `delivery_ok`, прежде чем повторится какое-либо слияние.
 
 ### 5. Противоречия
 
-- **F5.2** [medium] `skills/epic-files/SKILL.md:115`, против `flows/epic.yaml:213`
-  > instead (`close`'s `stale` for the push of the readiness branch and the pull request from
-  >       or the pull request from the epic branch into the base is red from the work: the
-  Исключение для `stale` стоит в предложении о причинах вне работы, среди них «a flaky CI run», и не имеет условий. Буквально: случайный сбой CI на PR из ветки эпика в базу — это `stale`. А `close` говорит `stale` только при «red from the work». Для отклонённого push в `epic-files` нет условия «because the epic branch moved». Две копии правила уже расходятся. Лишний `stale` тратит один из трёх визитов `readiness`.
-  Fix: в `epic-files` оставить только ссылку: «(`close`'s `stale`, as `close` says; `delivery`'s upgrade …)». Или повторить оба условия дословно. Passes: 2/3 (проходы 2 и 3; полный проход указал на то же расхождение копий).
+Новых находок нет. Ask `step_ok` теперь совпадает с `run` шаг 3: `flows/epic.yaml:159-160` «creates the step's tracker task (or reuses the paused / step's)».
 
 ### 6. Дублирование
 
-Новых находок, кроме расхождения копий в F5.2, нет. Правило reset/merge одно (`epic-files:95-102`). Правило «закрыть после слияния» есть только в `close`.
+- **F6.5** [low] `skills/step-review/SKILL.md:91`
+  >   refused because the epic branch moved, report `stale`: the readiness check is out of
+  Условие `stale` записано ещё и в `close` (`flows/epic.yaml:214`). `epic-files` теперь только ссылается на `close`, а step-review по-прежнему повторяет часть условия. Если исправлять F3.5, правок будет две.
+  Fix: в step-review оставить git-команды и «report as `close` says». Passes: full pass, confirmed (и в прошлых визитах эту находку дал один проход).
 
 ### 7. Когда звать человека
 
-- **F7.2** [high] `flows/epic.yaml:217-218` (state `close`)
-  >       visits (`flow_status`), do not report `stale`: show the human the command and its
-  >       output and stay in `close` until they decide.
-  LADO сам держит прогон, когда состояние исчерпало `max_visits`, и человек выбирает `continue` или `cancel` (`lead-sdlc`, «A run waits at a loop limit»). На этот механизм кит опирается и в `plan` (`:64` «the next review reaches its limit: tell the»). Здесь путь запрещён, а у `close` нет исхода для решения человека. Push отклоняют, потому что ветка эпика ушла вперёд, а красный PR нельзя слить. Остаётся только `lado flow-set` или отмена. Путь достижим: третий визит `readiness` принудительно сообщает `ready` (`:174`) даже с красной проверкой, которую вызвала работа.
-  Fix: «When `readiness` has had its three visits, report `stale` anyway: LADO holds the run at its limit; show the human the command and its output and recommend `continue` or `cancel`». Passes: 3/3 и полный проход (влияние high по проходу 2, проходы 1, 3 и полный дали medium; взято высшее).
+- **F7.3** [medium] `flows/epic.yaml:218-219` (state `close`)
+  >       `stale` anyway: LADO holds the run at its limit; show the human the command and its
+  >       output and recommend `continue` or `cancel`.
+  Что советовать в каком случае, не сказано. У `lead-sdlc` есть условие («recommend `continue` (one more review visit) when the open findings are being fixed, or `cancel`»), здесь его нет. А человек уже принял эпик на `delivery_ok`, и `cancel` оставит открытыми PR в базу, план и задачу в трекере, о чём ему не скажут. Совет будет разным от прогона к прогону и может склонить к потере принятого результата.
+  Fix: «recommend `continue` (one more readiness check of the approved result); `cancel` only when the human gives up the epic, and then say what stays open (the pull request into the base, the plan's State, the tracker task)». Passes: 1/3, confirmed. Цитата и условие `lead-sdlc` (`agents/supervisor.md:50-52` кита sdlc) на месте.
+
+- **F7.4** [medium] `flows/epic.yaml:142` (state `review`, пауза; то же в `close`, `:219`)
+  >       waits for `sdlc`, or the human cancels the run. When you come back from `readiness` with
+  Отмена предлагается, но коммиты, которые есть только на ветке прогона, при ней теряются: ключ шага на паузе (записан после слияния последнего PR плана, `:115`), строки решений о двух промахах и выборе «wait», пауза в State. Правка плана попадает в базу только PR «after the human's yes at a gate» (`epic-files:91`), а удалённую ветку удалили после прошлого PR плана. Следующий прогон `epic`, который продолжит эпик, читает `docs/epics/` на базе (`intake` 1). Он найдёт S<n> «planned» без ключа, `run` создаст вторую задачу, а журнал решений (R5) потеряет строки.
+  Fix: на паузе и на лимите советовать перед любым `cancel` слить правку плана (пауза, ключ, решения). Разрешить это одним PR плана по «да» человека в чате и записать исключение в `epic-files`, «Changing the files». Passes: full pass, confirmed.
 
 ### 8. Циклы при повторном визите
 
-- **F8.3** [low] `flows/epic.yaml:200` (state `close`, повторный визит)
-  >          (`step-review`, "Epic branch", "At close"), open the pull request from the epic
-  После `stale` из-за красного PR этот PR из ветки эпика в базу остаётся открытым. На следующем визите `close` шаг 2 велит открыть его снова. Хост откажет: PR между теми же ветками уже есть. Отказ уйдёт в «When a command fails» как причина вне работы, к человеку.
-  Fix: «open the pull request from the epic branch into the base, or reuse the one an earlier `close` opened». Passes: 1/3, confirmed. Путь `stale` по красному PR (`:213`) не закрывает PR, а шаг 2 его не переиспользует: в `close` нет ни слова «reuse».
+- **F8.4** [medium] `flows/epic.yaml:176` (state `readiness`, после `stale` и `continue`)
+  >       On the third visit report `ready` whatever is open, each gap under "Questions for the
+  `close` теперь сообщает `stale` и на лимите, так что после `continue` возможен четвёртый визит `readiness`. Касается ли его правило «third visit», не сказано. Красный PR по вине работы — это пробел (`agents/delivery.md:49` «a red check the work causes»), и починить его можно только через `gaps` → `review`. Если delivery прочтёт правило как «третий визит и дальше», он снова сообщит `ready`. Тогда прогон пойдёт по кругу `delivery_ok` → `close` → `stale` → лимит, ничего не исправив. Каждый круг проходит через гейт, так что круг не бесконечен, но выходом остаётся только `cancel`.
+  Fix: «On the third visit, unless the note is `close`'s `stale`, report `ready` whatever is open; after `continue` past the limit, report `gaps` as on any visit». Passes: 1/3, confirmed. Строки `:176` и `:218` и определение пробела на месте.
+
+- **F8.5** [low] `flows/epic.yaml:115` (state `run`, возобновлённый шаг)
+  >          Mark the step in `plan.md` "in progress" with the key and the run, and commit.
+  При возобновлении никто не убирает паузу из State, которую поставил `skills/step-brief/SKILL.md:74-75` («pause the epic in the plan's State until»). Ведущий после рестарта читает State первым и сочтёт эпик на паузе, хотя его шаг идёт.
+  Fix: добавить в шаг 3 «and remove the pause from the State». Passes: 1/3 и полный проход (проход 3 и полный нашли одно и то же).
 
 ### 9. Краткость и зачем
 
-- **F9.2** [low] `flows/epic.yaml:214-215` (state `close`)
-  >       readiness check is out of date and `delivery` checks again. First set the State of
-  После перестановки `stale` возможен только в шаге 2, до того как шаг 3 пометит план закрытым. State за это время никто не менял, так что «set … back» — пустое действие. `git commit` упадёт с «nothing to commit», и агент может принять это за сбой команды.
-  Fix: убрать предложение или сделать его условным: «when the State does not say `readiness`». Passes: 3/3.
-
-Новая причина удаления удалённой ветки верна: `epic-files:96` «so no merged branch is left on the host».
+Новых находок нет. Пустой коммит State убран, у новых правил есть причины: `:201-202` «so the base never says "closed" for a result that is not on it».
 
 ### 10. Описания навыков
 
-Новых находок нет. Описания не менялись, каждый навык из `skills:` используется.
+Новых находок нет. Описания не менялись.
 
 ### 11. Нейтральность к провайдеру
 
-Новых находок нет. В новом тексте только `git` и инструменты LADO (`flow_status`).
+Новых находок нет. `continue`, `cancel` и `flow_status` — слова и инструменты LADO.
 
 ### 12. Безопасность и рамки
 
-Новых находок нет. Push и merge в `close` идут после гейта `delivery_ok`. Удалённую ветку прогона удаляют только после слияния одобренного PR. Причины вне работы снова включают «a refused / push or merge» (`epic-files:113-114`).
+Новых находок нет. PR из ветки эпика сливается только после `delivery_ok` и зелёного CI; повторное использование PR не добавляет push. Что теряется при `cancel`, описано в F7.4.
 
 ## Известные дыры
 
 | Известная дыра | Находка или как кит с ней справляется |
 |---|---|
-| 1. Красная проверка возвращается без учёта окружения | `epic-files:108` «First tell whether the work caused it»; отказы push снова вне работы. Размыто только исключение `stale` (F5.2) |
-| 2. Работа вне flow, merge без гейта | merge только после гейтов; правка после аудита ждёт гейта и не трогает worktree во время `readiness` (`supervisor.md:86-88`) |
+| 1. Красная проверка возвращается без учёта окружения | `epic-files:108` «First tell whether the work caused it»; `stale` только при «red from the work». Конфликт из-за ушедшей вперёд базы ошибочно попадает в причины вне работы — F3.5 |
+| 2. Работа вне flow, merge без гейта | merge только после `plan_ok`, `step_ok`, `delivery_ok`; аудит ждёт гейта (`supervisor.md:86-88`) |
 | 3. Путь вне worktree прогона | новых путей нет |
-| 4. Вердикт без порога важности | без изменений; третий визит `readiness` выносит пробелы в вопросы человеку (`:174-175`) |
+| 4. Вердикт без порога важности | без изменений: «Report `ok` when no finding is blocking», «**A gap** is» |
 | 5. Навык зависимости пишет или спрашивает, где роли нельзя | без изменений |
 | 6. Команды не совпадают с `expects.commands` | без изменений: `expects commands: git` |
-| 7. Read-only роли не совпадают с тем, что делают | без изменений: `read-only roles: plan-critic`, `lado: ">=0.34"` |
+| 7. Read-only роли не совпадают с тем, что делают | без изменений: `read-only roles: plan-critic`, `lado: ">=0.34"`, README про Codex CLI |
 
 ## Не прослежено
 
-Нет. `--compare` печатает «same as the plan in BLUEPRINT.md». Новых элементов нет. Обе жёлтые меры обоснованы, число слов в разделе 4 совпадает со скриптом (819).
+Нет. `--compare` печатает «same as the plan in BLUEPRINT.md». Новых элементов нет. Обе жёлтые меры обоснованы в разделе 4, число слов совпадает со скриптом. `BLUEPRINT.md:205` («bounded by its `max_visits`») по-прежнему верно.
 
 ## Прежние находки
 
-Находки предыдущего отчёта (7619f57):
+Находки предыдущего отчёта (ba7736c):
 
 | Находка | Статус | Чем подтверждено |
 |---|---|---|
-| F8.1 `close` сливает «closed» до шага 2 | RESOLVED | `flows/epic.yaml:198` «1. Record their answer in `decisions.md` and commit»; шаг 3 после шага 2, `:201-202` |
-| F3.1 пауза: старый бриф, вторая задача | STILL OPEN | бриф теперь переписывается, но ключ теряется в «planned» (`epic-files:47`) — см. F3.1 выше; исправление само породило F2.2 |
-| F3.2 отказ push в ветки кита без правила | RESOLVED | `epic-files:113-114` «a refused / push or merge» |
-| F5.1 «closing pull request» неоднозначен | RESOLVED | `flows/epic.yaml:213` «the pull request from the epic branch into the base is red from the work». Расхождение копии в `epic-files` — F5.2 |
-| F8.2 нет правила на лимите `readiness` | RESOLVED | `flows/epic.yaml:174` «On the third visit report `ready` whatever is open». Новое в `close` — F7.2 |
-| F12.1 коммит аудита в общем worktree | RESOLVED | `agents/supervisor.md:86-88` |
-| F3.3 конфликт при merge | RESOLVED | `epic-files:100-102`. Не подходит для `plan.md` — F3.4 |
-| F7.1 человеку не говорят причину `stale` | RESOLVED | `flows/epic.yaml:172-173` «quote the command and its / output at the top of the report» |
-| F9.1 неверное «зачем» удаления ветки | RESOLVED | `epic-files:96` «so no merged branch is left on the host» |
-| F6.4 (Пропущено раньше) | STILL OPEN | `agents/supervisor.md:80` без изменений; автор оставил её человеку |
+| F2.2 пауза затирает бриф | RESOLVED | `flows/epic.yaml:139-141` «the line "No step proposed…", then S<n>'s task draft and brief in full»; `:111` «started with the brief under the pause line» |
+| F7.2 `close` на лимите без выхода | RESOLVED | `flows/epic.yaml:217-218` «report / `stale` anyway: LADO holds the run at its limit». Осталось условие совета — F7.3 |
+| F3.1 у «planned» нет ключа | RESOLVED | `epic-files:47` «planned (<KEY>, paused)»; `step-brief:74`; ask `step_ok` «or reuses the paused / step's» |
+| F5.2 исключение `stale` без условий | RESOLVED | `epic-files:115-116` «(`close`'s / `stale`, as `close` says» |
+| F3.4 правило конфликта для `plan.md` | RESOLVED | `epic-files:100-102`. Неясное «newer side» — F3.7 (low) |
+| F8.3 повторное открытие PR | RESOLVED | `flows/epic.yaml:202-203` «(or reuse the one an earlier `close` opened)» |
+| F9.2 пустой коммит State | RESOLVED | предложение удалено; `grep -n "back to \`readiness\`" flows/epic.yaml` пусто |
+| F2.3 (Пропущено раньше) | STILL OPEN | `flows/epic.yaml:101-104` без изменений |
+| F6.4 (Пропущено раньше) | STILL OPEN | `agents/supervisor.md:80` без изменений |
 
-Из отчёта `assess` (14 находок) все остаются RESOLVED (проверено в прошлом визите; последний diff их мест не трогал, кроме перечисленных выше).
+Находки отчёта `assess` и первого визита `evaluate` остаются RESOLVED: последний diff их мест не трогал.
 
 ## Вырезанные правила
 
-| Удалённое правило (файл:строка на e9b37a0 или 7619f57) | Где оно сейчас |
-|---|---|
-| `flows/epic.yaml:134` «(or two, only when they touch different files)» | `skills/step-brief/SKILL.md:57-58` |
-| `agents/supervisor.md:46-47` исключение fast-forward pull | `skills/epic-files/SKILL.md` «Safety on the human's machine», «on its conditions» |
-| `agents/supervisor.md:47` «Every role of this kit keeps the safety rules» | `agents/delivery.md` «keep the safety / rules of `epic-files`» |
-| `skills/epic-files/SKILL.md:89` (e9b37a0) reset после слияния | `skills/epic-files/SKILL.md:95-102`, с условием |
-| `skills/epic-files/SKILL.md` (7619f57) «At `close`, a refused push … is `close`'s `stale`.» | `skills/epic-files/SKILL.md:115-116` в оговорке «unless the step or role says»; условия при переносе потеряны — F5.2 |
-| `skills/epic-files/SKILL.md` (7619f57) «a refused push to a branch the kit does not own» | `:113-114` «a refused push or merge» (шире, правило e9b37a0 восстановлено) |
-| `flows/epic.yaml` (7619f57) `close` 1 «mark `plan.md` closed … merge it as a plan change» | `flows/epic.yaml` `close` шаг 3 |
-| `flows/epic.yaml` (7619f57) «closing pull request's CI is red from the work» | `:213` «the pull request from the epic branch into the base is red from the work» |
-| `skills/step-review/SKILL.md:91` (e9b37a0) «tell the human» | `flows/epic.yaml:172-173`: причина цитируется в отчёте, его показывает `delivery_ok` |
-| `flows/epic.yaml` (7619f57) `review` «the note says `step_ok` waits for `sdlc`, or the human cancels the run» | `flows/epic.yaml:140-141`, без изменений по смыслу |
+Все правила, удалённые до ba7736c, проверены в прошлых визитах (таблица там же, в git). Удалено в последнем diff:
 
-Потерянных правил нет. Ослабленное при переносе условие `stale` описано в F5.2.
+| Удалённое правило (файл:строка на ba7736c) | Где оно сейчас |
+|---|---|
+| `flows/epic.yaml:214-216` «First set the State of `plan.md` back to `readiness` and commit it» | не нужно: шаг 3 (закрытие) теперь после шага 2, и при `stale` State не менялся (F9.2) |
+| `flows/epic.yaml:216-218` «do not report `stale`: show the human … stay in `close`» | `:217-219`: `stale` всё равно, LADO держит прогон, показать команду и вывод человеку |
+| `skills/epic-files/SKILL.md:115-116` «`close`'s `stale` for the push of the readiness branch and the pull request from the epic branch into the base» | ссылка «as `close` says»; условия в `flows/epic.yaml:213-216` |
+| `skills/epic-files/SKILL.md:100` «keep the rows of both sides» для всех файлов эпика | `:100-102`: для `decisions.md`; `plan.md` — более новая сторона; остальное — abort |
+
+Потерянных правил нет.
 
 ## Пропущено раньше
 
-- **F2.3** [medium] `flows/epic.yaml:101-104` (state `run`)
-  >       gate: a comment binds like the plan.
-  >          whether your recommendation was taken; change `plan.md` where the answer changes
-  Шаг 0 применяет обязательный комментарий человека с гейта только к `plan.md`. Но шаг 3 создаёт задачу в трекере «from `step-brief`» и запускает прогон с «the brief whole», а `run` не переписывает `step-brief`. Комментарий, меняющий рамку или проверку шага, не дойдёт до аналитика, если ведущий не догадается сам.
-  Fix: в шаге 0 также применить ответ к черновику задачи и брифу и переписать `step-brief` до шага 3. Passes: full pass, confirmed. Строки 101–104 не менялись с e9b37a0.
+Эти находки в тексте, который этот прогон не менял. Вердикт они не блокируют.
 
-- **F6.4** [low] STILL OPEN `agents/supervisor.md:80`, против `flows/epic.yaml:146`
-  >   they want the full answer, offer the readiness check: at the next review the steps left
-  Правило «проверка готовности по просьбе человека» записано и в роли, и в `review`.
-  Fix: в роли оставить предложение и ссылку на `review`. Passes: full pass, confirmed (прошлый визит).
+- **F5.3** [medium] `skills/step-brief/SKILL.md:72`
+  >   design is approved as it is, and later briefs target the base.
+  Это «Switch to the base» после второго промаха. Дизайн шага аналитик sdlc писал, поставив ветку прогона на старую базу (`agents/analyst.md:30-31` кита sdlc: `git reset --keep` на `origin/<target>`), а кода прежних шагов там не было: он жил только на ветке эпика. Слияние ветки эпика в базу ветку шага не обновит. Дизайн, одобренный «as it is», описывает код без S1..S(n−1), и разработчик строит на устаревшей ветке. Разработчик sdlc вливает цель, только чтобы разрешить конфликт или красную проверку.
+  Fix: после слияния ветки эпика в базу советовать один раз отклонить дизайн: «the epic branch is now on the base: merge `origin/<base>` into the run's branch and revise the design». Passes: full pass, confirmed.
+
+- **F2.4** [low] `flows/epic.yaml:24-25` (state `intake`, продолжение эпика)
+  >          old one kept, and `plan.md` keeps its done steps and their numbers, its State
+  `Epic run:` в State по-прежнему называет старый прогон, а ведущий после рестарта ищет папку именно по нему (`agents/supervisor.md:28`). Запасной путь — ключ в `epic-brief`, но он там есть, только когда у эпика есть задача в трекере.
+  Fix: «its State back to `plan` with `Epic run:` this run». Passes: full pass, confirmed.
+
+- **F2.3** [medium] STILL OPEN `flows/epic.yaml:101-104`: комментарий с гейта применяется к `plan.md`, но не к `step-brief`, с которым стартует шаг.
+
+- **F6.4** [low] STILL OPEN `agents/supervisor.md:80`: правило «проверка готовности по просьбе человека» повторено в роли и в `review`.
 
 ## Оставлено планом
 
@@ -224,8 +225,8 @@ same as the plan in BLUEPRINT.md
 
 ## Вопросы человеку
 
-Нет.
+1. Выпускать 0.1.0, если правило остановки не выполнено (4 medium в изменённом тексте, все на редких путях: пауза, лимит `readiness`, база ушла вперёд во время `delivery_ok`)? Рекомендация: выпускать и завести F3.5, F7.3, F7.4 и F8.4 (и F5.3 из «Пропущено раньше») задачами на 0.1.1. Каждый круг здесь находил новые краевые случаи в путях, которые сам же добавлял, а основной путь эпика (план → шаги → готовность → закрытие) три круга подряд без high.
 
 ## Найдено по пути
 
-- Имя файла отчёта совпадает с отчётом `assess` (версия 0.1.0, та же дата), поэтому файл переписывается на каждом визите. Прежние версии лежат в git (256b4c4 — assess, 7619f57 — первый evaluate) и в артефакте `assessment`.
+- Имя файла отчёта совпадает с отчётом `assess` (версия 0.1.0, та же дата), поэтому файл переписывается на каждом визите. Прежние версии: git 256b4c4 (assess), 7619f57 и ba7736c (визиты `evaluate`), артефакт `assessment`.
