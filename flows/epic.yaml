@@ -108,7 +108,7 @@ states:
       2. On an epic branch, when it does not exist on the remote yet: create it from the
          base and push it.
       3. For each approved step, take its tracker key from `plan.md` when it has one (a
-         resumed step); only for a step without a key, create its tracker task from
+         resumed step, started with the brief under the pause line); only for a step without a key, create its tracker task from
          `step-brief` with `tracker` (this gate is the human's "yes, create"), linked to the epic's tracker task when
          the epic has one, and check the write (`sdlc-settings`, "Writing to the
          tracker"). Start its run of `task` (`step-brief`, "Starting the step's run").
@@ -136,8 +136,9 @@ states:
       When a step is left, draft it (two only as `step-brief` says, "Two steps at once")
       with `step-brief` and write `step-brief` whole. When the epic is paused (`step-brief`,
       the step back to "planned"), write `retro` and the State with the pause, and write
-      `step-brief` whole as "No step proposed: the epic is paused (<why>); approving
-      resumes S<n> with its tracker task <KEY>"; report `next`, the note saying `step_ok`
+      `step-brief` whole: the line "No step proposed: the epic is paused (<why>); approving
+      resumes S<n> with its tracker task <KEY>", then S<n>'s task draft and brief in full,
+      which its resumed run starts with; report `next`, the note saying `step_ok`
       waits for `sdlc`, or the human cancels the run. When you come back from `readiness` with
       `gaps`, its `delivery-report` names what is missing: each gap becomes a step or goes
       to "Later" on the human's word.
@@ -155,7 +156,8 @@ states:
     reads: [retro, plan, step-brief]
     ask: >-
       Approve the plan's revision and the next step? The lead then merges the plan's pull
-      request after green CI, creates the step's tracker task and starts its run of `task`.
+      request after green CI, creates the step's tracker task (or reuses the paused
+      step's) and starts its run of `task`.
     outcomes: {approved: run, rejected: review}
   readiness:
     agent: delivery
@@ -198,7 +200,7 @@ states:
       1. Record their answer in `decisions.md` and commit in the run's worktree.
       2. On an epic branch: push the readiness branch `delivery` left and delete it
          (`step-review`, "Epic branch", "At close"), open the pull request from the epic
-         branch into the base, wait for green CI and merge it. This comes before step 3,
+         branch into the base (or reuse the one an earlier `close` opened), wait for green CI and merge it. This comes before step 3,
          so the base never says "closed" for a result that is not on it.
       3. Mark `plan.md` closed (State: "closed", the date, a link to `report.md`), commit
          with the report and merge it as a plan change.
@@ -211,11 +213,10 @@ states:
       human (the release, the open checks in the release checklist). Report `stale` when
       in step 2 the push of the readiness branch is refused because the epic branch moved,
       or the pull request from the epic branch into the base is red from the work: the
-      readiness check is out of date and `delivery` checks again. First set the State of
-      `plan.md` back to `readiness` and commit it (it reaches the base with the next plan
-      change); note_body the command and its output. When `readiness` has had its three
-      visits (`flow_status`), do not report `stale`: show the human the command and its
-      output and stay in `close` until they decide.
+      readiness check is out of date and `delivery` checks again; note_body the command
+      and its output. When `readiness` has had its three visits (`flow_status`), report
+      `stale` anyway: LADO holds the run at its limit; show the human the command and its
+      output and recommend `continue` or `cancel`.
     outcomes: {closed: done, stale: readiness}
   done:
     end: true

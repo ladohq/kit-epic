@@ -71,5 +71,5 @@ record it in `decisions.md` and put the human two choices, with your recommendat
   you merge after green CI; set the plan's State to `Branch: base` and record it; this
   design is approved as it is, and later briefs target the base.
 - **Wait for `sdlc`**: cancel the step's run as `lead-sdlc` says ("At cancel"), set the
-  step back to "planned" and pause the epic in the plan's State until `sdlc` takes an
-  explicit target branch.
+  step back to "planned (<KEY>, paused)" and pause the epic in the plan's State until
+  `sdlc` takes an explicit target branch.

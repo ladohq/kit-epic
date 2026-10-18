@@ -44,8 +44,8 @@ Last review: <date>, base at <commit>
 
 ## Steps
 ### S<n> — <title> (<S|M|L>)
-Status: planned | in progress (<KEY>, run <name>) | done (<KEY>, PR <link>) |
-        done, check open until <event> | dropped (<reason>)
+Status: planned | planned (<KEY>, paused) | in progress (<KEY>, run <name>) |
+        done (<KEY>, PR <link>) | done, check open until <event> | dropped (<reason>)
 Check: <what proves it works, who runs it, where>
 Touches: <files or modules>   (when it is a parallel candidate)
 Notes: <leftovers carried in, decisions it rests on>
@@ -97,9 +97,9 @@ documentation.
   Then `git fetch origin`; only when `git log origin/<base>..HEAD` lists no commit,
   `git reset --keep origin/<base>`; otherwise `git merge origin/<base>`. A reset at any
   other time would drop commits not on the base yet (rows of `decisions.md`, statuses);
-  never reset in `readiness`. On a merge conflict in the epic's files keep the rows of
-  both sides (newest last) and commit; in any other file `git merge --abort` and tell the
-  human.
+  never reset in `readiness`. On a merge conflict: in `decisions.md` keep the rows of
+  both sides (newest last); in `plan.md` take the newer side and check it against
+  `decisions.md`; then commit. In any other file `git merge --abort` and tell the human.
 - After a commit to a file that is also an artifact (`plan`, `epic-brief`,
   `delivery-report`), write the artifact again from the file at once. The lead starts in
   the human's checkout, so it passes `write_artifact` the absolute path in the epic run's
@@ -111,11 +111,11 @@ First tell whether the work caused it. A red CI on a plan pull request, or a red
 readiness, that the change itself causes (a broken link, a failing docs check, a
 regression) is the work's: the lead fixes a plan change in the epic run's worktree; at
 readiness it is a gap. A cause outside the work (the network, a missing tool, a refused
-push or merge, branch protection, a flaky CI run, a host past its time ceiling) is no outcome and no gap, unless the step or role says what to report
-instead (`close`'s `stale` for the push of the readiness branch and the pull request from
-the epic branch into the base, `delivery`'s upgrade that cannot run here): `delivery`
-sends the command and its whole output to the lead with `send_message` and waits; the lead shows them to the human and waits until they say it is
-settled, then tells `delivery` to run it again; its own commands the lead runs again
+push or merge, branch protection, a flaky CI run, a host past its time ceiling) is no
+outcome and no gap, unless the step or role says what to report instead (`close`'s
+`stale`, as `close` says; `delivery`'s upgrade that cannot run here): `delivery` sends
+the command and its whole output to the lead with `send_message` and waits; the lead
+shows them to the human and waits until they say it is settled, then tells `delivery` to run it again; its own commands the lead runs again
 itself.
 
 ## Safety on the human's machine
