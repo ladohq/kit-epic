@@ -88,5 +88,5 @@ force-pushing the epic branch.
   the human sees the resolutions in `delivery-report` first.
 - **At close** (the lead, after `delivery_ok`): `git push origin
   readiness/<key>:<epic branch>`, then `git branch -D readiness/<key>`. When the push is
-  refused because the epic branch moved, tell the human; the readiness check is out of
+  refused because the epic branch moved, report `stale`: the readiness check is out of
   date.

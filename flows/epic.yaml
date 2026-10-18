@@ -31,8 +31,9 @@ states:
       4. Settle with them the epic's key (`epic-files`, "The key") and the branch
          strategy: by default every step merges into the base branch and leaves the
          product working, unfinished parts hidden; or an epic branch, named by the
-         settings' pattern (`sdlc-settings`, **Git**), merged into the base by a final
-         pull request. Ask which; recommend the default unless steps cannot each leave the
+         settings' pattern (`sdlc-settings`, **Git**), which the lead creates on the
+         remote and, after every step, brings the base into and pushes, merged into the
+         base by a final pull request. Ask which; recommend the default unless steps cannot each leave the
          product working.
       Write `docs/epics/<key>/brief.md` and start `decisions.md` (when continuing, add to
       them) with every decision of the rounds (`epic-files`), commit both in the run's worktree, then write `epic-brief`
@@ -131,8 +132,11 @@ states:
       and reason, the decisions recorded, the open checks and their events. Update
       `plan.md` (State, the step's status, leftovers, "Later") and `decisions.md`, commit
       them, and write `plan` from `plan.md` again.
-      When a step is left, draft it (or two, only when they touch different files) with
-      `step-brief` and write `step-brief` whole. When you come back from `readiness` with
+      When a step is left, draft it (two only as `step-brief` says, "Two steps at once")
+      with `step-brief` and write `step-brief` whole. When the epic is paused (`step-brief`,
+      the step back to "planned"), write `retro` and the State with the pause and report
+      `next` with no new step; the note says `step_ok` waits for `sdlc`, or the human
+      cancels the run. When you come back from `readiness` with
       `gaps`, its `delivery-report` names what is missing: each gap becomes a step or goes
       to "Later" on the human's word.
       Done when every source is read or marked unavailable with the reason, and the files
@@ -159,9 +163,11 @@ states:
     do: |
       Check whether the epic's result is ready to release, as your role describes, and
       write `docs/epics/<key>/report.md` (`epic-files`, "report.md").
-      On a later visit after `gaps` the steps the review added have ended: check again
-      from the start, not only the gaps; after a rejection at `delivery_ok` the note is the
-      human's reason: quote it at the top of the report and answer it.
+      On a later visit after `gaps` the steps the review added have ended: first mark each
+      gap of your previous `delivery-report` RESOLVED or STILL OPEN, then check again from
+      the start, not only the gaps; after a rejection at `delivery_ok` the note is the
+      human's reason: quote it at the top of the report and answer it; after `stale` at
+      `close` the note gives the refused push or the red CI: check again from the start.
       Done when every part of the report is filled from evidence (a command and its output,
       a source by name) or says why it cannot be, and the report is committed in the run's
       worktree; then write `delivery-report` from it. Report `gaps` when the report holds a
@@ -192,11 +198,14 @@ states:
          the base, wait for green CI and merge it.
       3. When the epic has a tracker task, post the report's summary on it and move it
          to the status that means done, with `tracker`.
-      A push, a red CI or a refused merge goes as `epic-files` says ("When a command
-      fails").
+      Any other failed push, red CI or refused merge goes as `epic-files` says ("When a
+      command fails").
       Done when the pull requests are merged and the tracker shows the writes. Report
       `closed`: note_summary is the merged pull requests; note_body what is left for the
-      human (the release, the open checks in the release checklist).
-    outcomes: {closed: done}
+      human (the release, the open checks in the release checklist). Report `stale` when
+      the push of the readiness branch is refused because the epic branch moved, or the
+      closing pull request's CI is red from the work: the readiness check is out of date
+      and `delivery` checks again; note_body the command and its output.
+    outcomes: {closed: done, stale: readiness}
   done:
     end: true

@@ -24,8 +24,10 @@ epic needs on top. Talk to the human as `sdlc-settings` says ("Talking to the hu
 Your context does not survive a restart, an update or a lost session; the epic's state
 does. Before you answer the human's first message:
 1. `flow_status`: every open run of `epic` and of `task`.
-2. For each open `epic` run, read `docs/epics/<key>/plan.md` ("State" first) and
-   `decisions.md` in that run's worktree, the path `flow_status` gives.
+2. For each open `epic` run, find its folder in that run's worktree (the path
+   `flow_status` gives): the folder whose `plan.md` State names this run (`Epic run:`),
+   or the key in the run's `epic-brief`. Read its `plan.md` ("State" first) and
+   `decisions.md`; before `plan`, read `brief.md`.
 3. Tell the human in two or three lines per epic where it stands and what is next.
 
 Plan steps (`S3`) and tracker keys (`ABC-12`) are different spaces: a step not yet in the
@@ -43,8 +45,8 @@ language. Start it from the base branch. Several epics may go at once, one run e
 
 Only in the epic run's worktree, and only the epic's files (`epic-files`, "Changing the
 files"). Your own repository is the human's checkout: read it, never edit, commit in or
-switch its branch there; the one exception is the fast-forward pull `lead-sdlc` makes
-after a run, on its conditions. Every role of this kit keeps the safety rules of `epic-files`.
+switch its branch there, but for the one exception `epic-files` names ("Safety on the
+human's machine").
 
 ## While a step runs
 
@@ -80,4 +82,5 @@ once only when they approved two.
 - **Advice they did not take**: as `step-review` says ("A release between steps", 3).
 - **A thematic audit of the plan** ("are all secrets covered?"): go through the readiness
   checklist topic and the plan, list the gaps with a step or "Later" for each, and change
-  the plan on their yes, as a plan change.
+  the plan on their yes: commit it in the epic run's worktree and write `plan` again; it
+  reaches the base with the next gate's plan pull request.

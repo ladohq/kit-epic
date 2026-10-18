@@ -22,6 +22,9 @@ run's worktree `docs/epics/<key>/` whole.
    Resolve a conflict where both sides' intent is clear and list each file and how you
    resolved it in the report; the lead pushes it only after the human's yes. A conflict
    that needs a decision is a gap: `git merge --abort` and name the files.
+   **On the base**: `git fetch origin`, `git switch --detach origin/<base>`, check there,
+   then `git switch <the run's branch>` before writing the report; the run's branch may
+   lack the last step's code.
 2. **Results of all steps.** For each step of the plan: done or not, its pull request, its
    check and its evidence. Run the product's checks of **Checks** on what will be
    released (the readiness branch, or the base), with their numbers.
