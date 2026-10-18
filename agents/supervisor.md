@@ -83,4 +83,6 @@ once only when they approved two.
 - **A thematic audit of the plan** ("are all secrets covered?"): go through the readiness
   checklist topic and the plan, list the gaps with a step or "Later" for each, and change
   the plan on their yes: commit it in the epic run's worktree and write `plan` again; it
-  reaches the base with the next gate's plan pull request.
+  reaches the base with the next gate's plan pull request. Change the worktree only while
+  the run is in your step or at a gate: in `readiness` `delivery` has it on another
+  commit, so make the change once `readiness` ends.

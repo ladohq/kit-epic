@@ -93,11 +93,13 @@ documentation.
   base is protected, check its rulesets too, not only branch protection (with `gh`:
   `gh api repos/<owner>/<repo>/rules/branches/<base>`).
 - After the plan pull request merged, delete the run's branch on the remote when the host
-  did not, so the next push of the run's branch is not refused after a squash merge.
+  did not, so no merged branch is left on the host.
   Then `git fetch origin`; only when `git log origin/<base>..HEAD` lists no commit,
   `git reset --keep origin/<base>`; otherwise `git merge origin/<base>`. A reset at any
   other time would drop commits not on the base yet (rows of `decisions.md`, statuses);
-  never reset in `readiness`.
+  never reset in `readiness`. On a merge conflict in the epic's files keep the rows of
+  both sides (newest last) and commit; in any other file `git merge --abort` and tell the
+  human.
 - After a commit to a file that is also an artifact (`plan`, `epic-brief`,
   `delivery-report`), write the artifact again from the file at once. The lead starts in
   the human's checkout, so it passes `write_artifact` the absolute path in the epic run's
@@ -108,13 +110,11 @@ documentation.
 First tell whether the work caused it. A red CI on a plan pull request, or a red check at
 readiness, that the change itself causes (a broken link, a failing docs check, a
 regression) is the work's: the lead fixes a plan change in the epic run's worktree; at
-readiness it is a gap. At `close`, a refused push of the readiness branch because the
-epic branch moved, or a red CI of the closing pull request from the work, is `close`'s
-`stale`. A cause outside the work (the network, a missing tool, a refused push to a
-branch the kit does not own or a refused merge, branch protection, a flaky CI run, a host
-past its time ceiling) is no outcome and no gap, unless the role says what to report
-instead (`delivery`'s upgrade that cannot run here): `delivery` sends the command and its whole output to the lead with
-`send_message` and waits; the lead shows them to the human and waits until they say it is
+readiness it is a gap. A cause outside the work (the network, a missing tool, a refused
+push or merge, branch protection, a flaky CI run, a host past its time ceiling) is no outcome and no gap, unless the step or role says what to report
+instead (`close`'s `stale` for the push of the readiness branch and the pull request from
+the epic branch into the base, `delivery`'s upgrade that cannot run here): `delivery`
+sends the command and its whole output to the lead with `send_message` and waits; the lead shows them to the human and waits until they say it is
 settled, then tells `delivery` to run it again; its own commands the lead runs again
 itself.
 

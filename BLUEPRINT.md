@@ -249,7 +249,7 @@ Output of the `kit-budget` script on version 0.1.0.
 | Gates in a flow | flows/epic.yaml | 3 | yellow | plan_ok (R5), step_ok (R6: creating a tracker task and starting a step are the human's, brief "Точки человека"), delivery_ok (R15: the feature's release or merge is the human's). Each guards a different decision; merging them would make the human approve a step without its plan revision or a delivery without its report. |
 | Words in a role prompt | agents/delivery.md | 570 | green | |
 | Words in a role prompt | agents/plan-critic.md | 344 | green | |
-| Words in the lead's prompt | agents/supervisor.md | 789 | green | |
+| Words in the lead's prompt | agents/supervisor.md | 819 | green | |
 | Own skills | kit | 3 | green | |
 | MCP servers | kit | 0 | green | |
 
