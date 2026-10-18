@@ -216,7 +216,7 @@ same as the plan in BLUEPRINT.md
 | `flows/epic.yaml:128` «Report `finish` when the plan has no step left» | `flows/epic.yaml:136-137`, расширено |
 | `flows/epic.yaml:171-172` (`close`) «bring the base in (`step-review`, "Epic branch")» перед закрывающим PR | частично: база вливается на `readiness` (`step-review:83`), в `close` повторно не вливается. Если база ушла вперёд, это ловит CI закрывающего PR, а для него нет пути назад — см. F3.6 |
 | `flows/epic.yaml:160-162` ask `delivery_ok` | `flows/epic.yaml` ask `delivery_ok`, переписан с push |
-| `skills/step-review/SKILL.md:74-80` «Epic branch» (одна процедура с push и разрешением конфликтов у delivery) | `skills/step-review/SKILL.md:72-89`, три пункта: after every step, at readiness, at close; «Never force-push» — строка 74 |
+| `skills/step-review/SKILL.md:74-80` «Epic branch» (одна процедура с push и разрешением конфликтов у delivery) | `skills/step-review/SKILL.md:72-89`, три пункта: after every step, at readiness, at close; «never force-pushing» — строки 75–76 |
 | `skills/step-review/SKILL.md:69-70` «Advice the human did not take…» | `skills/step-review/SKILL.md:69-71` (с «record it in `decisions.md`») |
 | `agents/supervisor.md:78-80` «Advice they did not take … instead of arguing» | `skills/step-review/SKILL.md:69-71` («instead of arguing» сохранено) |
 | `agents/supervisor.md:76-77` «recommend finishing the current step and reporting `finish`» | `agents/supervisor.md:78-79` («offer the readiness check») |
