@@ -80,10 +80,13 @@ force-pushing the epic branch.
   then `git switch <the run's branch>`. On a conflict, `git merge --abort`, switch back,
   and put the files to the human with a recommendation (a step of the plan, or leaving it
   to `delivery` at readiness).
-- **At readiness** (`delivery`): `git fetch origin`, `git switch -c readiness/<key>
-  origin/<epic branch>`, `git merge origin/<base>`; resolve conflicts as its role says and
-  commit; check on this branch; then `git switch <the run's branch>`. Nothing is pushed:
+- **At readiness** (`delivery`): `git fetch origin`, `git switch -C readiness/<key>
+  origin/<epic branch>` (a later visit starts it again from the current epic branch),
+  `git merge origin/<base>`; resolve conflicts as its role says and commit, or
+  `git merge --abort`; check on this branch; then `git switch <the run's branch>` before
+  writing the report. Nothing is pushed:
   the human sees the resolutions in `delivery-report` first.
 - **At close** (the lead, after `delivery_ok`): `git push origin
-  readiness/<key>:<epic branch>`. When the push is refused because the epic branch moved,
-  tell the human; the readiness check is out of date.
+  readiness/<key>:<epic branch>`, then `git branch -D readiness/<key>`. When the push is
+  refused because the epic branch moved, tell the human; the readiness check is out of
+  date.

@@ -63,8 +63,13 @@ merge brings the latest base in first.
 After the tracker task exists, start the run of `task` with `flow_start`, as `lead-sdlc`
 says ("Starting a run"), with the task text: the tracker key, then the brief whole, so the
 analyst reads it as the human's words about the task. On an epic branch, check each
-step's `design` at `design_ok`: its target branch must be the epic branch. When it names
-the base, recommend rejecting once with the brief's line 5 quoted. When the next design
-names the base again, `sdlc` does not take the epic branch on this tracker: put it to the
-human with a recommendation (switch the epic to merging into the base, or wait for
-`sdlc`) instead of rejecting again.
+step's `design` at `design_ok`: its target branch must be the epic branch. The first time
+in the epic a design names the base, recommend rejecting with the brief's line 5 quoted.
+When a design names the base again, `sdlc` does not take the epic branch on this tracker:
+record it in `decisions.md` and put the human two choices, with your recommendation:
+- **Switch to the base**: on their yes, the epic branch reaches the base by a pull request
+  you merge after green CI; set the plan's State to `Branch: base` and record it; this
+  design is approved as it is, and later briefs target the base.
+- **Wait for `sdlc`**: cancel the step's run as `lead-sdlc` says ("At cancel"), set the
+  step back to "planned" and pause the epic in the plan's State until `sdlc` takes an
+  explicit target branch.

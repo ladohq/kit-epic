@@ -82,10 +82,11 @@ documentation.
 ## Changing the files
 
 - Edit and commit only in the epic run's worktree (the path `flow_status` gives), by
-  path, never in the human's checkout. Besides `docs/epics/<key>/`, the one product file
-  the lead and `delivery` change is the product's release checklist (the file its release
-  docs name): a check moved there goes with the next plan change. Before the first change after a merge, put the
-  run's branch on the base: `git fetch origin` and `git reset --keep origin/<base>`.
+  path, never in the human's checkout. Besides `docs/epics/<key>/`, the lead and
+  `delivery` change only the product's release checklist (the file its release docs
+  name), where a moved check goes with the next plan change, and, at readiness,
+  `delivery`'s conflict resolutions of the base merge (`step-review`, "Epic branch").
+  Before the first change after a merge, put the run's branch on the base: `git fetch origin` and `git reset --keep origin/<base>`.
 - The plan's changes reach the base branch as a pull request from the run's branch, always
   to the base, also on an epic branch, so the state is on the base for the next start.
   The lead pushes and opens it only after the human's yes at a gate, waits for green CI
@@ -103,13 +104,16 @@ readiness, that the change itself causes (a broken link, a failing docs check, a
 regression) is the work's: the lead fixes a plan change in the epic run's worktree; at
 readiness it is a gap. A cause outside the work (the network, a missing tool, a refused
 push or merge, branch protection, a flaky CI run, a host past its time ceiling) is no
-outcome and no gap: `delivery` sends the command and its whole output to the lead with
-`send_message` and waits; the lead shows them to the human, waits until they say it is
-settled, and runs it again.
+outcome and no gap, unless the role says what to report instead (`delivery`'s upgrade
+that cannot run here): `delivery` sends the command and its whole output to the lead with
+`send_message` and waits; the lead shows them to the human and waits until they say it is
+settled, then tells `delivery` to run it again; its own commands the lead runs again
+itself.
 
 ## Safety on the human's machine
 
 Run nothing that deletes or resets beyond what you created: no `docker system prune`,
 `docker volume prune`, `docker image prune`, `rm -rf` outside your worktree or folders,
 `git clean`, or `git stash` in the human's checkout. Remove your own containers, volumes
-and folders by name. The human's checkout stays on its branch, untouched.
+and folders by name. The human's checkout stays on its branch, untouched, except the fast-forward pull
+`lead-sdlc` makes after a run.
