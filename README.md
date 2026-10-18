@@ -9,3 +9,5 @@
 
 - `journal/docker-install.md` — эпик «установка LADO через Docker» (`ladohq/lado`, LAD-52 и
   дальше).
+- `docs/brief.md` — бриф для kit-builder: с чего строить кит (задача LAD-103).
+- `.lado/tracker.yaml` — доска Yougile для кита tracker-yougile.
