@@ -159,7 +159,7 @@ states:
     outcomes: {approved: close, rejected: readiness}
   close:
     agent: supervisor
-    outcomes: {closed: done}
+    outcomes: {closed: done, stale: readiness}
   done:
     end: true
 ```
@@ -189,7 +189,7 @@ back to `review` as a new step.
 | `epic.step_ok` | gate | R6, R10, R14 | Creating a tracker task leaves the machine, and the human said "создать задачу" and "запустить" are theirs (brief, "Точки человека"); reads `retro`, `plan`, `step-brief`. |
 | `epic.readiness` | work step | R15 | Produces `delivery-report`; `gaps` sends a missing step back to `review`. `max_visits: 3`. |
 | `epic.delivery_ok` | gate | R15 | Releasing or merging the feature is only the human's; reads `delivery-report`, `plan`. |
-| `epic.close` | work step | R13, R15 | On an epic branch merges the final pull request the human approved; marks the plan closed, links the report, closes the epic's tracker item when it has one. |
+| `epic.close` | work step | R13, R15 | On an epic branch merges the final pull request the human approved; marks the plan closed, links the report, closes the epic's tracker item when it has one. `stale` sends it back to `readiness` when the approved result cannot be merged as it is (the epic branch moved on, the closing pull request's CI is red from the work): the lead may neither fix product code nor force-push, so a fresh readiness check, bounded by its `max_visits`, rebuilds the result and the human approves it again (critic's F3.6). |
 | `epic-files` | skill | R1, R3, R5, R11, R12, R15 | The formats every role shares: `docs/epics/<key>/` with `brief.md`, `plan.md` (State on top; steps with check, status — including "done, check open until X" — tracker key, run; "Later"), `decisions.md` (date, question, options, recommendation and by whom, decision and by whom, taken or not), `report.md`; the readiness checklist of topics (goal and "done", users, scope and limits, data and migrations, secrets, update and rollback, removal, platforms, observability, tests, documentation). Three roles read them, so one place. |
 | `step-brief` | skill | R6, R7, R14 | How to write a step's tracker task and brief: the frame, the check, thresholds, the human's standing rules of R7, parallel steps' file sets. The lead's know-how for one step kind, kept out of its prompt. |
 | `step-review` | skill | R9, R10, R12, R13 | The fixed sources and where each is, the plan-revision techniques with their journal examples, recurring traps between steps, the release-between-steps routine, bringing the base into an epic branch. |
