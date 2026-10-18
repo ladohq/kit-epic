@@ -59,7 +59,10 @@ plan's revision (`step_ok`), the gates of each step's run, and the delivery
 
 ## Known limit
 
-On an epic branch, `sdlc` 0.5.0 targets it when "the task's epic has a branch on the
-remote". The epic is any tracker task (or none), so each step's brief names the target
-branch and the epic, and the lead checks the target in the first step's design. This has
-not yet been tried on a real project; by default every step merges into the base branch.
+The epic-branch option is not yet proven. `sdlc` 0.5.0 targets "the epic's branch when the
+tracker has epics and the task's epic has a branch on the remote". For this kit any tracker
+task (or none) can be the epic, so each step's brief names the target branch and the epic,
+and the lead checks the target in each step's design and asks you after a second miss.
+With a tracker without epics the option will likely not work until `sdlc` takes an
+explicit target branch. By default every step merges into the base branch, which this does
+not affect.

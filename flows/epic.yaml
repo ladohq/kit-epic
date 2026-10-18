@@ -17,8 +17,11 @@ states:
     do: |
       Take the run's task, the human's statement of the feature, and make it ready to plan.
       1. Read the statement, the code and docs it touches, and `docs/epics/` on the base
-         branch: an epic of the same feature may exist already (then ask the human
-         whether this run continues it).
+         branch: an epic of the same feature may exist already. Then ask the human
+         whether this run continues it. When an open `epic` run holds it, recommend
+         cancelling this run. When it continues, keep its key and extend its files:
+         every row of `decisions.md` stays, and `brief.md` gains the new statement, the
+         old one kept.
       2. Assess it against the readiness checklist of `epic-files`: for each topic, covered,
          missing, or not relevant with a reason.
       3. Ask the human what is missing, in rounds: one message per round, numbered
@@ -69,12 +72,12 @@ states:
       Review the brief, the plan and the first step's draft as your role describes, and
       write `plan-review` whole.
       On a later visit your previous review is your `plan-review` artifact: mark each of
-      its findings RESOLVED or STILL OPEN first, then look for new ones. After the third
-      visit the human decides on what is still open, so on the third visit put each open
-      finding as a question for the human.
+      its findings RESOLVED or STILL OPEN first, then look for new ones.
       Done when every finding has an ID, a severity, its place and a quote. Report `ok`
-      when no finding is blocking; `changes` otherwise. note_summary is the verdict and
-      the counts by severity; note_body the blocking findings by ID.
+      when no finding is blocking; `changes` otherwise. On the third visit report `ok`
+      whatever is open, with each open blocking finding under "Questions for the human":
+      the human decides it at `plan_ok`. note_summary is the verdict and the counts by
+      severity; note_body the blocking findings by ID.
     outcomes: {ok: plan_ok, changes: plan}
   plan_ok:
     gate: approval
@@ -90,6 +93,9 @@ states:
     do: |
       Carry out the step(s) the human just approved. The note is the human's answer at the
       gate: a comment binds like the plan.
+      0. Record the answer in `decisions.md`: each open question with its decision, and
+         whether your recommendation was taken; change `plan.md` where the answer changes
+         it; commit.
       1. Merge the approved plan change: push the run's branch, open its pull request to
          the base branch, wait for green CI and merge it (`epic-files`, "Changing the
          files").
@@ -101,6 +107,8 @@ states:
          tracker"). Start its run of `task` (`step-brief`, "Starting the step's run").
          Mark the step in `plan.md` "in progress" with the key and the run, and commit.
       4. While the runs go, lead them as your role says ("While a step runs").
+      A push, a red CI or a refused merge goes as `epic-files` says ("When a command
+      fails"); this step has no outcome for it.
       Done when every run of `task` you started here has ended (done, dropped or
       cancelled). Report `done`: note_summary is each step with its key and how its run
       ended; note_body the pull requests, what the human said at the gates, and anything
@@ -125,9 +133,11 @@ states:
       Done when every source is read or marked unavailable with the reason, and the files
       are committed. Report `next` with the revision and the next step's draft for the
       human's yes: note_summary is the step reviewed and the next one; note_body the plan
-      changes and your recommendation. Report `finish` when the plan has no step left;
-      note_summary says so. A rejection at `step_ok` brings you back with the human's
-      reason: revise as they say and write `retro`, `plan` and `step-brief` again.
+      changes and your recommendation. Report `finish` when the plan has no step left, or
+      when the human asks for the readiness check with steps left, which then go to
+      "Later" on their word; note_summary says which. A rejection at `step_ok` brings you
+      back with the human's reason: record it in `decisions.md`, revise as they say and
+      write `retro`, `plan` and `step-brief` again.
     outcomes: {next: step_ok, finish: readiness}
   step_ok:
     gate: approval
@@ -149,29 +159,36 @@ states:
       human's reason: quote it at the top of the report and answer it.
       Done when every part of the report is filled from evidence (a command and its output,
       a source by name) or says why it cannot be, and the report is committed in the run's
-      worktree; then write `delivery-report` from it. Report `ready` when nothing the
-      feature needs is missing; `gaps` otherwise: note_summary is the verdict; note_body
-      each gap with its evidence.
+      worktree; then write `delivery-report` from it. Report `gaps` when the report holds a
+      gap as your role defines it; `ready` otherwise: note_summary is the verdict;
+      note_body each gap with its evidence. A failure outside the work is no outcome
+      (`epic-files`, "When a command fails").
     outcomes: {ready: delivery_ok, gaps: review}
   delivery_ok:
     gate: approval
     reads: [delivery-report, plan]
     ask: >-
-      Accept the epic as delivered? The lead merges the closing pull request (on an epic
-      branch, the epic branch into the base), marks the plan closed and closes the epic's
-      tracker task when it has one. Releasing the product stays yours.
+      Accept the epic as delivered? The lead merges the closing pull request; on an epic
+      branch it first pushes the base merge the report describes (with its conflict
+      resolutions) to the epic branch, then merges the epic branch into the base. It marks
+      the plan closed and closes the epic's tracker task when it has one. Releasing the
+      product stays yours.
     outcomes: {approved: close, rejected: readiness}
   close:
     agent: supervisor
     reads: [delivery-report]
     do: |
       Close the epic the human accepted; their comment at the gate binds.
-      1. Mark `plan.md` closed (State: "closed", the date, a link to `report.md`) and
-         commit with the report in the run's worktree; merge it as a plan change.
-      2. On an epic branch: bring the base in (`step-review`, "Epic branch"), open the
-         pull request from the epic branch into the base, wait for green CI and merge it.
+      1. Record their answer in `decisions.md`, mark `plan.md` closed (State: "closed", the
+         date, a link to `report.md`) and commit with the report in the run's worktree;
+         merge it as a plan change.
+      2. On an epic branch: push the readiness branch `delivery` left
+         (`step-review`, "Epic branch"), open the pull request from the epic branch into
+         the base, wait for green CI and merge it.
       3. When the epic has a tracker task, post the report's summary on it and move it
          to the status that means done, with `tracker`.
+      A push, a red CI or a refused merge goes as `epic-files` says ("When a command
+      fails").
       Done when the pull requests are merged and the tracker shows the writes. Report
       `closed`: note_summary is the merged pull requests; note_body what is left for the
       human (the release, the open checks in the release checklist).

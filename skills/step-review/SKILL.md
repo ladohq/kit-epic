@@ -22,7 +22,7 @@ say what each gave, "nothing", or "unavailable: <why>".
 | openspec proposal, "Out of scope" | the archived change on the base (`openspec/changes/archive/`), or the run's `design` | deferred leftovers, the human's decisions with dates |
 | ledger | the run's artifact `<run>/ledger`, and the review report it names | "Not checked", declined findings, found on the way |
 | integrator's comment | the step's tracker task, with `tracker` | what to check by hand, regression risk, what is left by hand |
-| the run's talk with the human | `lado log <session> --agent <worker>` for each worker of the run (`list_agents`), and your own messages about the run | the analyst's questions, rejections at gates, trouble in the manual check, leftovers named at the end |
+| the run's talk with the human | `lado log <session> --agent <worker>` for each worker of the run (`list_agents`; without `lado` on PATH, mark it unavailable), and your own messages about the run | the analyst's questions, rejections at gates, trouble in the manual check, leftovers named at the end |
 | the run's artifacts | `list_artifacts(run=<run>)`: `design`, `build-report`, `ledger`, mock-ups | measured figures, decisions for the record |
 | the base since the last review | `git log` of `origin/<base>` from the commit in the plan's State | changes outside the epic that touch what its steps rest on (CI, a shared file) |
 
@@ -66,15 +66,24 @@ When the base gets a release (a tag, a new version in the CHANGELOG, the human s
    CHANGELOG line sits under the version that is open on the base now.
 2. Move each check open until this release into the product's release checklist, with
    what to run and what to expect, so it outlives the epic; mark it in the plan.
-3. Advice the human did not take before the release: its risk goes into the release
-   checklist as a check.
+3. Advice the human did not take (a release before a step you recommended): record it in
+   `decisions.md`, and move its risk into the release checklist as a check, instead of
+   arguing.
 
 ## Epic branch
 
-After every step on an epic branch, and before its final pull request, bring the base in,
-in the epic run's worktree with a clean tree:
-`git fetch origin`, `git switch --detach origin/<epic branch>`, `git merge origin/<base>`,
-`git push origin HEAD:<epic branch>`, then `git switch <the run's branch>`. On a conflict,
-the lead runs `git merge --abort`, switches back and puts the files to the human with a
-recommendation (a step of the plan, or `delivery` at readiness); `delivery` resolves it as
-its role says. Never force-push the epic branch.
+Bring the base into the epic branch in the epic run's worktree with a clean tree, never
+force-pushing the epic branch.
+
+- **After every step** (the lead, in `review`): `git fetch origin`, `git switch --detach
+  origin/<epic branch>`, `git merge origin/<base>`, `git push origin HEAD:<epic branch>`,
+  then `git switch <the run's branch>`. On a conflict, `git merge --abort`, switch back,
+  and put the files to the human with a recommendation (a step of the plan, or leaving it
+  to `delivery` at readiness).
+- **At readiness** (`delivery`): `git fetch origin`, `git switch -c readiness/<key>
+  origin/<epic branch>`, `git merge origin/<base>`; resolve conflicts as its role says and
+  commit; check on this branch; then `git switch <the run's branch>`. Nothing is pushed:
+  the human sees the resolutions in `delivery-report` first.
+- **At close** (the lead, after `delivery_ok`): `git push origin
+  readiness/<key>:<epic branch>`. When the push is refused because the epic branch moved,
+  tell the human; the readiness check is out of date.

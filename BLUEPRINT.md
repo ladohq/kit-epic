@@ -234,9 +234,9 @@ Output of the `kit-budget` script on version 0.1.0.
 | Worker roles (not supervisor) | kit | 2 | green | |
 | Work steps in a flow | flows/epic.yaml | 7 | yellow | intake (R1) and plan (R3) are separate so a lost context resumes at the right one (набл. 20); plan_review is the independent check (R4); run and review are the step loop (R6, R9, R10); readiness (R15) needs a fresh worker; close (R13, R15) acts only after the human's delivery decision, which a gate cannot do. |
 | Gates in a flow | flows/epic.yaml | 3 | yellow | plan_ok (R5), step_ok (R6: creating a tracker task and starting a step are the human's, brief "Точки человека"), delivery_ok (R15: the feature's release or merge is the human's). Each guards a different decision; merging them would make the human approve a step without its plan revision or a delivery without its report. |
-| Words in a role prompt | agents/delivery.md | 379 | green | |
+| Words in a role prompt | agents/delivery.md | 539 | green | |
 | Words in a role prompt | agents/plan-critic.md | 344 | green | |
-| Words in the lead's prompt | agents/supervisor.md | 747 | green | |
+| Words in the lead's prompt | agents/supervisor.md | 760 | green | |
 | Own skills | kit | 3 | green | |
 | MCP servers | kit | 0 | green | |
 

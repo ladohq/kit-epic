@@ -33,8 +33,9 @@ the epic's tracker task to link to, when there is one. No design: that is the an
    unless the image grows over 1 GB or the build over 3 min"), and what to do past it.
 5. **Target branch.** The base branch, or the epic branch:
    "Target branch: `<epic branch>`; the task's epic is `<key>`; the branch is on the
-   remote." `sdlc` targets an epic branch only when the task's epic has one, so the
-   brief names both.
+   remote." The analyst of `sdlc` 0.5.0 targets "the epic's branch when the tracker has
+   epics and the task's epic has a branch on the remote"; the brief names both, since
+   for this kit any task can be the epic.
 6. **Standing rules**, always, word for word in meaning:
    - The pull request carries the manual check from the start: which branch to switch to,
      from which folder, the commands, the expected result, and `env | grep <prefix>` and
@@ -61,6 +62,9 @@ merge brings the latest base in first.
 
 After the tracker task exists, start the run of `task` with `flow_start`, as `lead-sdlc`
 says ("Starting a run"), with the task text: the tracker key, then the brief whole, so the
-analyst reads it as the human's words about the task. On an epic branch, check the first
-step's `design` at `design_ok`: its target branch must be the epic branch; when it names
-the base, recommend rejecting with the brief's line 5 quoted.
+analyst reads it as the human's words about the task. On an epic branch, check each
+step's `design` at `design_ok`: its target branch must be the epic branch. When it names
+the base, recommend rejecting once with the brief's line 5 quoted. When the next design
+names the base again, `sdlc` does not take the epic branch on this tracker: put it to the
+human with a recommendation (switch the epic to merging into the base, or wait for
+`sdlc`) instead of rejecting again.

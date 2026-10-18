@@ -4,9 +4,9 @@ description: >-
   The epic's files in the product repository, `docs/epics/<key>/` (brief.md, plan.md with
   its State, decisions.md, report.md), the epic's key, the readiness checklist of topics,
   how the files change (only in the epic run's worktree, merged by a plan pull request),
-  and the safety rules on the human's machine. Use when reading or writing any of these
-  files, assessing a statement or a result against the checklist, or before a command that
-  deletes anything.
+  what to do when a command fails, and the safety rules on the human's machine. Use when
+  reading or writing any of these files, assessing a statement or a result against the
+  checklist, when a push, CI or check fails, or before a command that deletes anything.
 ---
 
 # The epic's files
@@ -82,7 +82,9 @@ documentation.
 ## Changing the files
 
 - Edit and commit only in the epic run's worktree (the path `flow_status` gives), by
-  path, never in the human's checkout. Before the first change after a merge, put the
+  path, never in the human's checkout. Besides `docs/epics/<key>/`, the one product file
+  the lead and `delivery` change is the product's release checklist (the file its release
+  docs name): a check moved there goes with the next plan change. Before the first change after a merge, put the
   run's branch on the base: `git fetch origin` and `git reset --keep origin/<base>`.
 - The plan's changes reach the base branch as a pull request from the run's branch, always
   to the base, also on an epic branch, so the state is on the base for the next start.
@@ -90,7 +92,20 @@ documentation.
   and merges it; when the base is protected, check its rulesets too, not only branch
   protection (with `gh`: `gh api repos/<owner>/<repo>/rules/branches/<base>`).
 - After a commit to a file that is also an artifact (`plan`, `epic-brief`,
-  `delivery-report`), write the artifact again from the file at once.
+  `delivery-report`), write the artifact again from the file at once. The lead starts in
+  the human's checkout, so it passes `write_artifact` the absolute path in the epic run's
+  worktree; a relative path would show the human an older file.
+
+## When a command fails
+
+First tell whether the work caused it. A red CI on a plan pull request, or a red check at
+readiness, that the change itself causes (a broken link, a failing docs check, a
+regression) is the work's: the lead fixes a plan change in the epic run's worktree; at
+readiness it is a gap. A cause outside the work (the network, a missing tool, a refused
+push or merge, branch protection, a flaky CI run, a host past its time ceiling) is no
+outcome and no gap: `delivery` sends the command and its whole output to the lead with
+`send_message` and waits; the lead shows them to the human, waits until they say it is
+settled, and runs it again.
 
 ## Safety on the human's machine
 
