@@ -4,7 +4,7 @@
 checks the statement is ready, asks the human what is missing, plans small verifiable
 steps, runs each step as a run of the flow `task` of the kit `sdlc` in the same session,
 reviews every step's results and revises the plan, and ends with a release-readiness check
-and a report of every decision. The human talks to one lead, approves the plan, each next
+and a report of the decisions that matter. The human talks to one lead, approves the plan, each next
 step whose review changed the plan, and the delivery, and keeps every gate of `sdlc`; the
 lead gives a recommendation on each of them with the epic's context and records the
 decisions that matter. A short living `status` shows where the epic stands at any time.
@@ -100,8 +100,8 @@ human's answers in session `kit-epic` (#1526, #1570).
   base. *Source:* round 3, Q4; human V8.
 - **R15** The epic ends with a release-readiness step: the results of all steps, what was
   checked by hand, what is missing, an upgrade from the previous version with the user's
-  old files, open checks moved into the release checklist, and a final report with every
-  decision. Releasing, or merging the epic branch, is the human's decision. *Source:*
+  old files, open checks moved into the release checklist, and a final report with the
+  decisions that matter (R5). Releasing, or merging the epic branch, is the human's decision. *Source:*
   round 3, Q5; human V9, V10; набл. 18.
 - **R16** The kit never works in the human's main checkout and never runs global
   destructive commands (`docker system prune`, `docker volume prune`, `rm -rf` outside its
@@ -170,9 +170,10 @@ Decisions of the interview recorded here:
   report `kit-reports/epic-0.1.0-2026-10-18.md`, F3.1).
 - The pushes to an epic branch get no gate of their own: the human's choice of the
   strategy at intake covers them, so the gates stay at three (F12.2, F12.3).
-- The run's branch is put on the base by `git reset --keep` only right after the plan
-  pull request merged and only with no unmerged commit on it; otherwise the base is
-  merged in, so no decision row is lost (F12.1).
+- The run's branch is never reset: the base is merged into it after the plan pull request
+  of `run` (a fast-forward), before `readiness` and in `close` before the closing pull
+  request, with the conflict rule of `epic-files`, so no decision row is lost (F12.1 of
+  0.1.0; F3.1 of the 0.2.0 re-evaluation).
 - The epic-branch option stays unverified in 0.1.0 (README, "Known limit"); an explicit
   target branch for `sdlc` is a backlog item of this repository, not a part of this kit.
 - R18 is a third outcome of `review` (`continue: run`), not a conditional gate: the flow
@@ -279,7 +280,7 @@ back to `review` as a new step.
 | `epic.plan` | work step | R2, R3, R5, R14 | Writes the plan (steps with checks, walking skeleton first, research first when needed, parallel candidates marked) and the first step's draft task and brief. Produces `plan` and `step-brief`; on a later visit reads `plan-review` and the human's reason. |
 | `epic.plan_review` | work step | R4 | Reads `epic-brief`, `plan`, `step-brief`; produces `plan-review`; `changes` sends it back. `max_visits: 3`: after three rounds the human decides. |
 | `epic.plan_ok` | gate | R5, R6, R18 | Only the human decides the plan and its open questions, and that approving it lets the lead start its steps without `step_ok` while the plan stays as approved (R18); reads `epic-brief`, `plan`, `plan-review`, `step-brief`. |
-| `epic.run` | work step | R6, R7, R8, R10, R12, R13, R14, R18, R19 | `max_visits: 20`: the gate-less loop with `review` needs a limit; at it the human answers before each further step. On its first visit after a gate or a `continue`: after `plan_ok` merges the approved plan change (pull request from the epic run's worktree, after green CI), otherwise pushes the run's branch (R10); writes the step's tracker key into `plan.md` and commits it as soon as the task exists, before starting its run; creates the step's tracker task(s) with `tracker`, starts the `task` run(s) with the brief, recommends on their gates, reports progress, and handles a release that happens meanwhile. Done when every started `task` run ended (LADO tells the lead). Produces nothing: the results are in the step runs' artifacts, which `review` reads. |
+| `epic.run` | work step | R6, R7, R8, R10, R12, R13, R14, R18, R19 | `max_visits: 20`: the gate-less loop with `review` needs a limit; at it the human answers before each further step. On its first visit after a gate or a `continue`: after `plan_ok` merges the approved plan change (pull request from the epic run's worktree, after green CI), otherwise pushes the run's branch (R10); writes the step's tracker key into `plan.md` and commits it as soon as the task exists, before starting its run; creates the step's tracker task(s) with `tracker`, starts the `task` run(s) with the brief, recommends on their gates, keeps `status` (R19), and handles a release that happens meanwhile. Done when every started `task` run ended (LADO tells the lead). Produces nothing: the results are in the step runs' artifacts, which `review` reads. |
 | `epic.review` | work step | R9, R10, R12, R13, R14, R18, R22, R23 | Reviews the ended step(s) from the fixed sources of `step-review`, revises the plan, records decisions, brings the base into an epic branch, drafts the next step. Produces `retro`; writes `plan` and `step-brief` again. `continue` → `run` when nothing of the plan changed (R18), with each kind of change marked "no" in the note; `next` → `step_ok`; `finish` when no step is left. |
 | `epic.step_ok` | gate | R6, R10, R14, R18 | Creating a tracker task leaves the machine, and the human said "создать задачу" and "запустить" are theirs (brief, "Точки человека"); since 0.2.0 only when the review changed the plan: the human's yes at `plan_ok` covers the unchanged steps (R18, #1570); reads `retro`, `plan`, `step-brief`. |
 | `epic.readiness` | work step | R15, R22, R24 | Produces `delivery-report`; `gaps` sends a missing step back to `review`. `max_visits: 3`. |
@@ -361,3 +362,4 @@ Similar paragraphs: none. Overall: yellow.
 | 2026-10-25 | 0.2.0 | The review checks whether a visible change was checked by hand (R23); a later readiness focuses on the gaps and the base's diff (R24); root first in the lead's defect questions (R8) | LAD-145 R11, R12, R4; #1570 |
 | 2026-10-25 | 0.2.0 | The other findings of the full assessment, among them the open ones of 0.1.1 (F3.2, F7.1, F2.6, F6.1, F8.1) | `kit-reports/epic-0.1.0-2026-10-25.md`; #1570, answer 5 |
 | 2026-10-25 | 0.2.0 | `run` gets `max_visits: 20`: the loop `run` → `review` → `run` via `continue` has no gate, and `lado kits check` requires a limit | author's `build-report` of `improve/epic-2` |
+| 2026-10-25 | 0.2.0 | The run's branch is never reset; the base is merged in after the plan pull request, before `readiness` and in `close`; `plan_ok`'s question names the release checklist's own pull requests | `kit-reports/epic-0.2.0-2026-10-25.md`, F3.1, F12.1, F5.3 |
