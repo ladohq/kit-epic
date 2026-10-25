@@ -42,8 +42,9 @@ first" with what is unknown.
 # Plan: <feature>
 
 ## State
-Phase: <intake|plan|steps|paused (<why>)|readiness|closed> · Epic run: <run> · Branch: <base | epic/...>
+Phase: <intake|plan|steps|paused (waits for sdlc)|readiness|closed> · Epic run: <run> · Branch: <base | epic/...>
 In work: S<n> (<KEY>, run <name>) · Next: S<n> · Open checks: S<n> until <event>
+Pause asked: <date>   (only while the human's "pause" holds, `step-review`)
 Standing rules of the human: <one line each>
 Last review: <date>, base at <commit>
 
@@ -146,8 +147,9 @@ documentation.
   rows of both sides (newest last); in `plan.md` take the newer side and check it against
   `decisions.md`; in the release checklist keep the base's lines and add the run's; then
   commit. In any other file `git merge --abort` and tell the human. Never reset the run's
-  branch: a commit not on the base yet (a row of `decisions.md`, a step's status in
-  `plan.md`) would be lost.
+  branch, except once in `intake` before its first commit (`intake` says why): later, a
+  commit not on the base yet (a row of `decisions.md`, a step's status in `plan.md`)
+  would be lost.
 - After a commit to a file that is also an artifact (`plan`, `epic-brief`,
   `delivery-report`), write the artifact again from the file at once. The lead starts in
   the human's checkout, so it passes `write_artifact` the absolute path in the epic run's

@@ -3,9 +3,11 @@ name: step-review
 description: >-
   How to review an epic step that ended and revise the plan: the fixed sources of a step's
   results and where each is, the plan-revision techniques with their examples, what
-  counts as a change of the plan (a gate or none), traps that recur between steps, a
-  release between steps, and bringing the base into an epic branch. Use after a step's
-  run of `task` ends, when a release happens mid-epic, or before merging an epic branch; for drafting the next step use `step-brief`.
+  counts as a change of the plan (a gate or none), the human's "pause", traps that recur
+  between steps, a release between steps, and bringing the base into an epic branch. Use
+  after a step's run of `task` ends, when the human says "pause", when a release happens
+  mid-epic, or before merging an epic branch; for drafting the next step use
+  `step-brief`.
 ---
 
 # Reviewing a step
@@ -63,14 +65,15 @@ without `step_ok`, unless the review changed the plan. A change is any of:
 - the next step's frame or check changed;
 - a leftover carried into the next step;
 - a new question for the human, a recommended manual check among them;
-- the human said "pause".
+- the State has `Pause asked`.
 
 Statuses, "Later" and leftovers carried into later steps are not. The note of `continue`
 lists each kind with "no".
 
-The human may say "pause" at any time. Set the State's Phase to `paused (asked <date>)`
-and commit at once, so the review sees it after a lost context; `run` clears it when the
-human approves the next step.
+The human may say "pause" at any time: add the State's line `Pause asked: <date>` and
+commit it, at once while the run is in your step or at a gate, otherwise once the run is
+back from `plan_review` or `readiness` (there it stops nothing). So the review sees it
+after a lost context; `run` removes it when the human approves the next step.
 
 ## Traps between steps
 

@@ -42,7 +42,7 @@ names is not the epic's: leave it to `lead-sdlc`.
 
 ## Starting an epic
 
-The human gives a feature, from one line to a full specification. Start a run of `epic`
+Start a run of `epic`
 with `flow_start`: the task is the human's statement whole, with what they said about it;
 the name `epic-<a short slug of the feature>`; `human_language` the settings' chat
 language. Start it from the base branch. Several epics may go at once, one run each.
@@ -97,6 +97,7 @@ A line on every move buried the overview (89 messages in one epic).
 - **"Can we release?"**, mid-epic: answer from the plan's open checks and statuses; when
   they want the full answer, offer the readiness check (`review`).
 - **Advice they did not take**: as `step-review` says ("A release between steps", 3).
+- **"Pause"**: record it as `step-review` says ("What changes the plan").
 - **A thematic audit of the plan** ("are all secrets covered?"): go through the readiness
   checklist topic and the plan, list the gaps with a step or "Later" for each, and change
   the plan on their yes: commit it and write `plan` again. Change the worktree only while

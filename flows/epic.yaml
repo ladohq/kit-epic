@@ -18,12 +18,16 @@ states:
     do: |
       Take the run's task, the human's statement of the feature, and make it ready to plan.
       1. Read the statement, the code and docs it touches, and `docs/epics/` of
-         `origin/<base>` after `git fetch origin`: an epic of the same feature may exist already. Then ask the human
-         whether this run continues it. When an open `epic` run holds it, recommend
-         cancelling this run. When it continues, keep its key and extend its files:
-         every row of `decisions.md` stays, `brief.md` gains the new statement with the
-         old one kept, and `plan.md` keeps its done steps and their numbers, its State
-         back to `plan`.
+         `origin/<base>` after `git fetch origin`: an epic of the same feature may exist
+         already. Then ask the human whether this run continues it. When an open `epic`
+         run holds it, recommend cancelling this run. When it continues, keep its key and
+         extend its files: every row of `decisions.md` stays, `brief.md` gains the new
+         statement with the old one kept, and `plan.md` keeps its done steps and their
+         numbers, its State back to `plan`.
+         Before the first commit, put the run's branch on the base: `git reset --keep
+         origin/<base>` in the run's worktree, the one reset of the run's branch. LADO
+         starts it from the human's HEAD, whose other commits the plan's pull request
+         would bring into the base.
       2. Settle the epic's key with the human first (`epic-files`, "The key"): it names the
          folder that keeps their answers.
       3. Assess it against the readiness checklist of `epic-files` (`brief.md`).
@@ -124,12 +128,15 @@ states:
       3. For each step to start, take its tracker key from `plan.md` when it has one (a
          resumed step, or one whose task a lost context left without a run); only for a
          step without a key, create its tracker task from `step-brief` with `tracker`
-         (the human's yes at `plan_ok` or `step_ok` is the yes to create), linked to the
+         (`plan_ok` is the explicit "yes, create" for the task of each step of the plan it
+         approved, `step_ok` for the step it approves; for any other task the rule of
+         `sdlc-settings` holds), linked to the
          epic's tracker task when the epic has one, check the write (`sdlc-settings`,
          "Writing to the tracker"), and at once mark the step "in progress (<KEY>)" in
          `plan.md` and commit, so a restart creates no second task. Start its run of `task`
          (`step-brief`, "Starting the step's run"). Add the run to the step's status,
-         remove a pause from the State, and commit.
+         remove a pause from the State (the line `Pause asked`, or Phase `paused (waits
+         for sdlc)`), and commit.
       4. While the runs go, lead them as your role says ("While a step runs", "Telling the
          human").
       On the 20th visit (`flow_status`) tell the human that from the next one LADO asks
@@ -154,12 +161,12 @@ states:
       and reason, the decisions recorded, the open checks and their events. Update
       `plan.md` (State, the step's status, leftovers, "Later") and `decisions.md`, commit
       them, and write `plan` from `plan.md` again. Push the epic-branch merge of
-      `step-review` here; the run's branch `run` pushes, but on `finish` bring the base
-      into it and push it here (`epic-files`, "Changing the files").
+      `step-review` here, and the run's branch on every outcome, on `finish` after bringing
+      the base into it (`epic-files`, "Changing the files").
       When a step is left, draft it (two only as `step-brief` says, "Two steps at once")
-      with `step-brief` and write `step-brief` whole. When the epic is paused (`step-brief`,
+      with `step-brief` and write `step-brief` whole. When the epic waits for `sdlc` (`step-brief`,
       the step back to "planned"), write `retro` and the State with the pause, and write
-      `step-brief` whole: the line "No step proposed: the epic is paused (<why>); approving
+      `step-brief` whole: the line "No step proposed: the epic waits for `sdlc`; approving
       resumes S<n> with its tracker task <KEY>", then S<n>'s task draft and brief in full,
       which its resumed run starts with; report `next`, the note saying `step_ok`
       waits for `sdlc`, or the human cancels the run. When you come back from `readiness` with
@@ -169,7 +176,7 @@ states:
       are committed. Report `continue` when nothing changed the plan (`step-review`, "What
       changes the plan") and the next step is one the human approved at `plan_ok` or an
       earlier `step_ok`: note_summary is the step reviewed and the next one; note_body each
-      kind of change with "no". Report `next` otherwise, always after the human's "pause",
+      kind of change with "no". Report `next` otherwise, always when the State has `Pause asked`,
       with the revision and the next step's draft for the human's yes: note_summary is the
       step reviewed and the next one; note_body the plan changes and your recommendation.
       Report `finish` when the plan has no step left, or when the human asks for the
