@@ -10,15 +10,22 @@ free-form statement to a delivered result, using the kit
 3. Step by step: on your yes it creates the step's tracker task and runs it as a run of
    `sdlc`'s flow `task` in the same session; you keep `sdlc`'s design and merge gates, and
    the lead gives its recommendation on each with the epic's context.
-4. After every step it reviews the results from fixed sources, revises the plan and
-   drafts the next step for your yes.
+4. After every step it reviews the results from fixed sources and revises the plan. When
+   the review changed nothing of the plan, the next approved step starts at once; when it
+   split or added a step, changed the next one, or has a question for you, the next step
+   waits for your yes at `step_ok`. Say "pause" to the lead to stop at the next review.
 5. At the end a delivery worker checks release readiness (all steps, manual checks, an
    upgrade from the previous version with old files) and writes the final report with
-   every decision. Releasing stays yours.
+   the decisions that matter. Releasing stays yours.
+
+Each epic has a short artifact `status` (phase, steps done, what waits for you, the next
+action); the lead writes to you only when an epic starts, when a step ends, about once an
+hour on a long step, and when the epic waits for you outside a gate.
 
 The kit writes no product code. The plan, the decisions log and the epic's state live in
-the product repository, `docs/epics/<key>/`, and reach the base branch by pull requests
-the lead merges after green CI; the lead reads them at every start and resume.
+the product repository, `docs/epics/<key>/`, and reach the base branch by two pull
+requests the lead merges after green CI, after `plan_ok` and at the close; in between the
+lead pushes the run's branch. The lead reads them at every start and resume.
 
 ## Install and start
 
@@ -48,18 +55,30 @@ The role `plan-critic` is read-only, so the kit does not run on Codex CLI.
 ## Flow `epic`
 
 `intake` (lead) → `plan` (lead) → `plan_review` (plan-critic) → gate `plan_ok` →
-`run` (lead: tracker task and run of `task`) → `review` (lead) → gate `step_ok` → `run` …
+`run` (lead: tracker task and run of `task`) → `review` (lead) → `run` when the plan is
+unchanged, else gate `step_ok` → `run` …
 → `readiness` (delivery) → gate `delivery_ok` → `close` (lead).
 
 ![epic](blueprint-flows/epic.svg)
 
-Your decisions: the open questions and the plan (`plan_ok`), each next step with the
-plan's revision (`step_ok`), the gates of each step's run, and the delivery
-(`delivery_ok`).
+Your decisions: the open questions and the plan, which also covers starting its steps
+while the plan stays as approved (`plan_ok`), each next step after a review that changed
+the plan (`step_ok`), the gates of each step's run, and the delivery (`delivery_ok`).
+
+## Changes in 0.2.0
+
+- Fewer gates: `step_ok` only after a review that changed the plan.
+- The artifact `status`, and far fewer messages from the lead.
+- Two plan pull requests per epic instead of one per gate; `decisions.md` keeps rows for
+  the decisions that matter and a counter for approvals as recommended.
+- The plan critic blocks steps to split and checks without the way back or the docs.
+
+Runs of `epic` started with 0.1.0 keep the 0.1.0 flow to their end: LADO runs a run on the
+flow it had at its start.
 
 ## Known limit
 
-The epic-branch option is not yet proven. `sdlc` 0.5.0 targets "the epic's branch when the
+The epic-branch option is not yet proven. The analyst of `sdlc` targets "the epic's branch when the
 tracker has epics and the task's epic has a branch on the remote". For this kit any tracker
 task (or none) can be the epic, so each step's brief names the target branch and the epic,
 and the lead checks the target in each step's design and asks you after a second miss.

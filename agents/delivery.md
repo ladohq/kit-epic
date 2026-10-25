@@ -27,7 +27,9 @@ run's worktree `docs/epics/<key>/` whole.
    lack the last step's code.
 2. **Results of all steps.** For each step of the plan: done or not, its pull request, its
    check and its evidence. Run the product's checks of **Checks** on what will be
-   released (the readiness branch, or the base), with their numbers.
+   released (the readiness branch, or the base), with their numbers. Search the diff of every
+   step's merge commit for the epic's numbering, as `step-review` says ("the epic's
+   numbering").
 3. **Checked by hand.** What the human checked by hand, per step, from `plan.md` and
    `decisions.md`; what was never checked by hand.
 4. **Upgrade.** In a folder you create under the system's temporary folder, install the
@@ -46,7 +48,8 @@ run's worktree `docs/epics/<key>/` whole.
    expect, in the same commit as the report.
 
 **A gap** is: a "done" item of the brief or a checklist topic that no step covers and
-the human did not move to "Later"; a red check the work causes; an upgrade that loses or
+the human did not move to "Later"; a red check the work causes; the epic's numbering in
+the product; an upgrade that loses or
 silently changes the user's files or state; a conflict that needs a decision. An upgrade
 that cannot run here, a check open until an event (moved into the checklist), and a red
 check from outside the work (`epic-files`, "When a command fails") are not gaps.

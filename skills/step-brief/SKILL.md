@@ -33,7 +33,7 @@ the epic's tracker task to link to, when there is one. No design: that is the an
    unless the image grows over 1 GB or the build over 3 min"), and what to do past it.
 5. **Target branch.** The base branch, or the epic branch:
    "Target branch: `<epic branch>`; the task's epic is `<key>`; the branch is on the
-   remote." The analyst of `sdlc` 0.5.0 targets "the epic's branch when the tracker has
+   remote." The analyst of `sdlc` targets "the epic's branch when the tracker has
    epics and the task's epic has a branch on the remote"; the brief names both, since
    for this kit any task can be the epic.
 6. **Standing rules**, always, word for word in meaning:
@@ -46,6 +46,9 @@ the epic's tracker task to link to, when there is one. No design: that is the an
      task as derived, with the design artifacts attached.
    - The plan and the epic's files under `docs/epics/` are the epic's: leave them as they
      are.
+   - The epic's numbering stays out of the product: no step numbers (`S6`), no "not built
+     yet (step S6)" and no links to `docs/epics/` in its code, docs, specs or UI; say what
+     is missing in the product's own words.
    - At the end, name the leftovers: what was not checked, what was declined, what is
      out of scope.
    - No global destructive command on the human's machine (`epic-files`, "Safety on the
@@ -55,8 +58,7 @@ the epic's tracker task to link to, when there is one. No design: that is the an
 ## Two steps at once
 
 Only when the human asked for it and the plan marks both as candidates whose `Touches`
-do not overlap. Say in each brief that the other runs alongside, and that the second to
-merge brings the latest base in first.
+do not overlap. Say in each brief that the other runs alongside.
 
 ## Starting the step's run
 

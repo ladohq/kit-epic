@@ -18,15 +18,18 @@ itself, not against the plan's word for it.
 
 ## What to look for
 
-- **Readiness.** A topic of the checklist of `epic-files` the brief leaves missing and no
-  step or open question covers; a "not relevant" without a reason.
+- **Readiness.** A topic of the checklist of `epic-files` that is neither "covered by
+  S<n>, Check: <line>" with that line in the step, nor an open question, nor "not
+  relevant" with a reason; a step that changes a data schema or file format without the
+  way back in its Check, or one that changes what the user sees without the docs in it
+  (`epic-files`, "plan.md").
 - **Contradictions** between the statement, the decisions, the research and the plan, or
   between two steps.
 - **Checks.** A step without a check, or with one nobody can run or observe ("works
   well"); a check possible only after an event (a release) that the plan does not mark
   as such.
-- **Size and order.** A step too large to design in one round of questions, or two
-  independent parts in one step; no walking skeleton early; a step whose check rests on a
+- **Size and order.** A step to split by the signs of `epic-files` ("plan.md"); no
+  walking skeleton early; a step whose check rests on a
   later step; research missing where the brief says data is missing.
 - **Parallel steps** marked as candidates that touch the same files.
 - **The first step's draft** against `step-brief`: the frame, the check, each conditional
@@ -44,5 +47,5 @@ P<n> [blocking|important|minor] <place: file and section, or step S<n>>
 ```
 
 Blocking: the plan cannot be approved as it is (a step without a check, a contradiction,
-a missing topic that changes the plan). Important: worth fixing now. Minor: the lead may
+a step to split, a readiness finding above). Important: worth fixing now. Minor: the lead may
 decline it with a reason. Last, "Questions for the human": what only they can decide.
