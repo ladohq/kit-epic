@@ -36,3 +36,21 @@ them for later at `release_ok` of `improve/epic-2` (2026-10-25).
   though only the revision is asked for.
 - **F9.1** [low] `plan_ok`'s question: "It also merges" has no clear subject; say "The
   lead also merges".
+
+Left for later at the second `release_ok` of `improve/epic-2` (report commit 3747819):
+
+- **F5.7** [medium] `step_ok`'s "yes, create" covers only the next step, not the later
+  steps its revision added (S4b after a split), which then start after `continue`.
+- **F3.5** [low] Clearing `paused (waits for sdlc)` does not say what the Phase becomes
+  (`steps`).
+- **F3.6** [low] A pause said during `readiness` is committed at `delivery_ok` and stays in
+  the closed plan; `close` step 3 does not remove it.
+- **F3.7** [low] `review`'s `next` (pause) and `finish` (no step left) overlap when both
+  hold.
+- **F6.2** [low] `run` step 1 pushes after `continue` what `review` already pushed.
+- **F9.2** [low] `review`: "the State with the pause" should name Phase `paused (waits for
+  sdlc)`.
+- **F2.3** [low] `flow_status(run)` does not name the workers of an ended run, and a role's
+  name recurs between runs: take the names from the run's lines in `lado log`.
+- **F8.2** [low, missed earlier] After `gaps`, `review` must read every step source again;
+  the source then is the `delivery-report`.

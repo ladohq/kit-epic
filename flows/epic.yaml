@@ -25,9 +25,11 @@ states:
          statement with the old one kept, and `plan.md` keeps its done steps and their
          numbers, its State back to `plan`.
          Before the first commit, put the run's branch on the base: `git reset --keep
-         origin/<base>` in the run's worktree, the one reset of the run's branch. LADO
-         starts it from the human's HEAD, whose other commits the plan's pull request
-         would bring into the base.
+         origin/<base>` in the run's worktree, the one reset of the run's branch, and only
+         while `git log origin/<base>..HEAD -- docs/epics/` shows no commit; never after,
+         or a lost context would erase the human's committed answers. LADO starts the
+         branch from the human's HEAD, whose other commits the plan's pull request would
+         bring into the base.
       2. Settle the epic's key with the human first (`epic-files`, "The key"): it names the
          folder that keeps their answers.
       3. Assess it against the readiness checklist of `epic-files` (`brief.md`).
@@ -135,8 +137,9 @@ states:
          "Writing to the tracker"), and at once mark the step "in progress (<KEY>)" in
          `plan.md` and commit, so a restart creates no second task. Start its run of `task`
          (`step-brief`, "Starting the step's run"). Add the run to the step's status,
-         remove a pause from the State (the line `Pause asked`, or Phase `paused (waits
-         for sdlc)`), and commit.
+         remove Phase `paused (waits for sdlc)` from the State, and the line `Pause asked`
+         only when its date is older than the gate the human just approved (a pause said
+         at that gate or after it stays); commit.
       4. While the runs go, lead them as your role says ("While a step runs", "Telling the
          human").
       On the 20th visit (`flow_status`) tell the human that from the next one LADO asks
