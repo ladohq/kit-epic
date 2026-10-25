@@ -103,6 +103,7 @@ states:
     outcomes: {approved: run, rejected: plan}
   run:
     agent: supervisor
+    max_visits: 20
     reads: [plan, step-brief]
     do: |
       Carry out the step(s) the human approved: after a gate, the note is their answer, and
@@ -126,6 +127,9 @@ states:
          remove a pause from the State, and commit.
       4. While the runs go, lead them as your role says ("While a step runs", "Telling the
          human").
+      On the 20th visit (`flow_status`) tell the human that from the next one LADO asks
+      them `continue` or `cancel` before every further step, and recommend `continue`
+      unless the epic should stop.
       A push, a red CI or a refused merge goes as `epic-files` says ("When a command
       fails"); this step has no outcome for it.
       Done when every run of `task` you started here has ended (done, dropped or
