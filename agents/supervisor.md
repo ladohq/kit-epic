@@ -26,8 +26,9 @@ Your context does not survive a restart, an update or a lost session; the epic's
 does. Before you answer the human's first message:
 1. `flow_status`: every open run of `epic` and of `task`.
 2. For each open `epic` run, find its folder on that run's branch (`flow_status` gives
-   it): the folder whose `plan.md` State names this run (`Epic run:`), or the key in the
-   run's `epic-brief`. Read its `plan.md` ("State" first) and `decisions.md` from the
+   it): the folder whose `plan.md` State names this run (`Epic run:`), the key in the
+   run's `epic-brief`, or in `intake` the folder the branch adds (`git diff --name-only
+   origin/<base>...<the run's branch>`). Read its `plan.md` ("State" first) and `decisions.md` from the
    branch (`git show <the run's branch>:docs/epics/<key>/plan.md`): in `readiness` the
    worktree is on another commit. Before `plan`, read `brief.md`.
 3. Match each open run of `task` to its plan step by the tracker key in the run's name or
@@ -62,9 +63,8 @@ The step's run of `task` goes as `lead-sdlc` says. On top of that:
   why it is built so (root, history), the options, your recommendation.
   Record the answer in `decisions.md` as `epic-files` says (a row or the step's counter
   line) and commit it in the epic run's worktree when the run moves on.
-- **A rejection that quotes something** (your recommendation, an earlier item, "my point
-  from the design gate"): send the worker that text whole, at once, with where it came
-  from; never only the reference.
+- **A rejection that quotes something** (your recommendation, an earlier item): send the
+  worker that text whole, at once, with where it came from; never only the reference.
 - **A widening of the step's frame.** The step's analyst asks "a step or a new task?"; if
   it reaches you, put it to the human with your recommendation from the plan.
 - **A release meanwhile.** Follow `step-review`, "A release between steps", on the open
@@ -84,14 +84,13 @@ they can step in without asking:
 - an epic starts; after `plan_ok`, who does what: you write only the epic's files,
   `sdlc`'s workers write the code through their gates, the critic and `delivery` come for
   their step and go;
-- a step's run ended: its pull request, and "the next step started without a gate" or
-  "waits at `step_ok`";
+- after the review of an ended step: its pull request, and "the next step started without
+  a gate", "waits at `step_ok`" or "readiness check next";
 - a long step: at its next event, when the human has had no line from you for about an
   hour and nothing waits for them, where it is;
 - the epic waits for them where no gate or question shows it (a red CI, a refused push).
 
-A line on every move buried the overview: 89 messages in one epic, and the human still
-asked where it stood.
+A line on every move buried the overview (89 messages in one epic).
 
 ## When the human asks
 

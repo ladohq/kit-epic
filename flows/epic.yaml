@@ -59,7 +59,8 @@ states:
         research document with checks and difficulties; a small feature is one step;
       - mark steps that could run two at once and the files each touches;
       - the open questions with your recommendation, and "Later".
-      Turn each "missing" topic of `brief.md` into its step or open question. Then draft
+      Rewrite each "missing" verdict of `brief.md` as "covered by S<n>, Check: <line>" or
+      an open question (`epic-files`, "brief.md"). Then draft
       the first step with `step-brief`. Commit `plan.md`, `brief.md` and `decisions.md` in
       the run's worktree, write `plan` and `epic-brief` from them; write `step-brief`
       whole.
@@ -97,7 +98,9 @@ states:
       Approve the plan, its open questions as recommended (or as you say), and the first
       step? This also lets the lead create the tracker tasks of the plan's later steps and
       start them without `step_ok` while a step's review does not change the plan; a
-      change, or your "pause" to the lead, brings `step_ok`. The lead then merges the
+      change, or your "pause" to the lead, brings `step_ok`. It also merges a change of
+      the product's release checklist by its own pull request at once, so a release
+      between steps has it. The lead then merges the
       plan's pull request after green CI, creates the first step's tracker task and starts
       its run of `task`.
     outcomes: {approved: run, rejected: plan}
@@ -107,10 +110,12 @@ states:
     reads: [plan, step-brief]
     do: |
       Carry out the step(s) the human approved: after a gate, the note is their answer, and
-      a comment binds like the plan; after `continue`, the next step of the plan.
+      a comment binds like the plan; after `review`'s `continue`, the next step of the
+      plan. After LADO's `continue` at this step's visit limit, act on the note before
+      that limit, which the note's body quotes, as on that note.
       0. After a gate, record the answer in `decisions.md` (`epic-files`: a row or the
          step's counter line) and change `plan.md` where it changes it; commit. After
-         `continue` there is no answer: record nothing.
+         `review`'s `continue` there is no answer: record nothing.
       1. After `plan_ok`, merge the approved plan: push the run's branch, open its pull
          request to the base branch, wait for green CI and merge it; after `step_ok` or
          `continue`, only push the run's branch (`epic-files`, "Changing the files").
@@ -148,7 +153,9 @@ states:
       Write `retro` whole: per source what it gave, the plan changes with their technique
       and reason, the decisions recorded, the open checks and their events. Update
       `plan.md` (State, the step's status, leftovers, "Later") and `decisions.md`, commit
-      them, and write `plan` from `plan.md` again; push nothing yet (`run` does).
+      them, and write `plan` from `plan.md` again. Push the epic-branch merge of
+      `step-review` here; the run's branch `run` pushes, but on `finish` bring the base
+      into it and push it here (`epic-files`, "Changing the files").
       When a step is left, draft it (two only as `step-brief` says, "Two steps at once")
       with `step-brief` and write `step-brief` whole. When the epic is paused (`step-brief`,
       the step back to "planned"), write `retro` and the State with the pause, and write
@@ -228,7 +235,8 @@ states:
          branch into the base (or reuse the one an earlier `close` opened), wait for green CI and merge it. This comes before step 3,
          so the base never says "closed" for a result that is not on it.
       3. Mark `plan.md` closed (State: "closed", the date, a link to `report.md`), commit
-         with the report and merge it as a plan change.
+         with the report, bring the base into the run's branch and merge it as a plan
+         change (`epic-files`, "Changing the files").
       4. When the epic has a tracker task, post the report's summary on it and move it
          to the status that means done, with `tracker`.
       Any other failed push, red CI or refused merge goes as `epic-files` says ("When a

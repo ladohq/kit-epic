@@ -36,7 +36,7 @@ Apply each that fits; name the technique in `retro`.
   step they belong to, by source. A leftover of one step is often a requirement of a later
   one.
 - **Merge** two steps when the check of one runs into the other.
-- **Split** a step when its parts are independent and one blocks later steps.
+- **Split** a step by the signs of `epic-files` ("plan.md"), a step the review adds too.
 - **Reorder** when a blocker is gone and the next step is worth less than the one after.
 - **Change the approach** in a future step instead of patching the current one.
 - **Add to "Later"** what the step moved out of its frame, with the task and how it
@@ -62,11 +62,15 @@ without `step_ok`, unless the review changed the plan. A change is any of:
 - a step added, dropped, split, merged or reordered;
 - the next step's frame or check changed;
 - a leftover carried into the next step;
-- a new question for the human;
+- a new question for the human, a recommended manual check among them;
 - the human said "pause".
 
 Statuses, "Later" and leftovers carried into later steps are not. The note of `continue`
 lists each kind with "no".
+
+The human may say "pause" at any time. Set the State's Phase to `paused (asked <date>)`
+and commit at once, so the review sees it after a lost context; `run` clears it when the
+human approves the next step.
 
 ## Traps between steps
 

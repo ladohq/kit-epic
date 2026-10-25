@@ -31,7 +31,8 @@ names the folder and, on an epic branch, the branch.
 The statement as clarified: the human's words first, quoted; then the goal and what
 "done" means; the readiness checklist with a verdict per topic: "covered by S<n>, Check:
 <its line>", "missing: <the question or the step that will cover it>", or "not relevant:
-<why>" (intake has no steps yet; `plan` turns each "missing" into its step); the branch
+<why>". Intake has no steps yet, so there a topic the statement answers is "missing: a
+step"; `plan` rewrites each "missing" as "covered by …" or an open question; the branch
 strategy; the epic's tracker task, if any; the verdict, "ready to plan" or "research
 first" with what is unknown.
 
@@ -77,7 +78,10 @@ another way than recommended. Newest last.
 - A row for a recommendation the human did not take, a decision that changed the plan, a
   step's frame, the concept or the order, and a rejection at a gate.
 - One counter line per step for the approvals as recommended, with their gate and
-  question IDs: `S3: gates #40, #41, #43 — approved as recommended`.
+  question IDs: `S3: gates #40, #41, #43 — approved as recommended`; those outside a step
+  (`plan_ok`, `delivery_ok`) go on the line `Epic: …`.
+- At intake every answer is a row, in short: `brief.md` is written only at its end, so
+  nothing else keeps it.
 - Not recorded: questions about the process ("can it run in parallel", "where are we"),
   unless the human confirms an answer as a rule; then it is a row, and the rule goes into
   the State.
@@ -99,10 +103,10 @@ recommendations were taken (rows and counter lines).
 
 An artifact only, never a file: `<run>/status` of the epic run, at most about 25 lines:
 the phase; steps done N of M; the step in work with its run and that run's state; what
-waits for the human, and where (the run and its gate, or the question); the open checks
-until release; the next action. The lead writes it whole, rebuilt from the plan's State
-and `flow_status`, at every move of the epic run and at every start and end of a step's
-run. A file would need a commit at every move; what must survive a lost context is in the
+waits for the human, with a link to it (the run and its gate, or the question); the open
+checks until release; the next action. The lead writes it whole, rebuilt from the plan's
+State and `flow_status`, at every move of the epic run, at every start and end of a
+step's run, and at every gate or question of a step's run. A file would need a commit at every move; what must survive a lost context is in the
 State already.
 
 ## Readiness checklist
@@ -126,17 +130,24 @@ documentation.
   a pull request for a few lines of markdown runs the product's full CI. So the state of
   an open epic is on its run's branch on the remote, and on the base after `close`.
 - A change of the release checklist must reach a release between steps, so it goes to the
-  base at once by its own pull request: `git fetch origin`, `git switch -c <the run's
-  branch>-checklist origin/<base>`, commit only that change, push, then `git switch <the
-  run's branch>`. `delivery`'s commit at readiness goes with the closing pull request.
+  base at once by its own pull request, covered by the human's yes at `plan_ok` (its
+  question says so): `git fetch origin`, `git switch -C <the run's branch>-checklist
+  origin/<base>`, commit only that change, push, then `git switch <the run's branch>`.
+  `delivery`'s commit at readiness goes with the closing pull request.
 - Open the plan's pull request only after the human's yes at a gate. Wait for green CI on
-  each pull request and merge it with a merge commit, never squash or rebase, with the code host and its tool from `sdlc-settings` (**Git**); when the base
-  is protected, check its rulesets too, not only branch protection (with `gh`:
+  each pull request and merge it with a merge commit, never squash or rebase, with the
+  code host and its tool from `sdlc-settings` (**Git**); when the base is protected, check its rulesets too, not only branch protection (with `gh`:
   `gh api repos/<owner>/<repo>/rules/branches/<base>`). Then delete its branch on the
   remote when the host did not; after `close`, the epic branch too.
-- After the plan pull request of `run` merged: `git fetch origin`, `git merge
-  origin/<base>` (a fast-forward). Never reset the run's branch: a commit not on the base
-  yet (a row of `decisions.md`, a status) would be lost.
+- Bring the base into the run's branch after the plan pull request of `run` merged (a
+  fast-forward), before `readiness` (in `review`, on `finish`) so `delivery` moves checks
+  into the current release checklist, and in `close` before the closing pull request:
+  `git fetch origin`, `git merge origin/<base>`. On a conflict: in `decisions.md` keep the
+  rows of both sides (newest last); in `plan.md` take the newer side and check it against
+  `decisions.md`; in the release checklist keep the base's lines and add the run's; then
+  commit. In any other file `git merge --abort` and tell the human. Never reset the run's
+  branch: a commit not on the base yet (a row of `decisions.md`, a step's status in
+  `plan.md`) would be lost.
 - After a commit to a file that is also an artifact (`plan`, `epic-brief`,
   `delivery-report`), write the artifact again from the file at once. The lead starts in
   the human's checkout, so it passes `write_artifact` the absolute path in the epic run's
