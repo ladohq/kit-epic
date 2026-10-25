@@ -173,8 +173,8 @@ same as the plan in BLUEPRINT.md (exit status 0)
 | F12.4 [medium] проверка не в worktree рана | RESOLVED | `epic.yaml:27-28` и `:30-31` — `git -C <the run's worktree>` |
 | F3.8 [medium] пауза по датам | RESOLVED | `epic.yaml:140-142` «only after `step_ok` approved a `next` whose note named that pause» (два «pause» подряд — F3.9) |
 | F5.9 [medium] две копии правила паузы | RESOLVED | `step-review:76` «`run` says when it is removed (step 3)» |
-| F5.10 [low] «`intake` puts its branch on the base» | RESOLVED | `supervisor.md:47-48` «(step 1)» |
-| F6.3 [low] старое условие в `epic-files` и чертеже | RESOLVED в `epic-files` | `epic-files:149-150` «except once in `intake`, as its step 1 says (when and why)»; `BLUEPRINT.md:173` — см. «Не прослежено» |
+| F5.10 [low] «`intake` puts its branch on the base» | RESOLVED | `supervisor.md:47` «(step 1)» |
+| F6.3 [low] старое условие в `epic-files` и чертеже | RESOLVED в `epic-files` | `epic-files:150` «except once in `intake`, as its step 1 says (when and why)»; `BLUEPRINT.md:173` — см. «Не прослежено» |
 | F7.2 [low] пауза до `plan_ok` снимается им | RESOLVED | `epic.yaml:141-142` «never / after `plan_ok`» |
 | Все находки BACKLOG «epic 0.2.1» (18) | STILL OPEN, оставлены планом | BACKLOG |
 
