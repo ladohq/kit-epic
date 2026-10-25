@@ -44,7 +44,7 @@ first" with what is unknown.
 ## State
 Phase: <intake|plan|steps|paused (waits for sdlc)|readiness|closed> · Epic run: <run> · Branch: <base | epic/...>
 In work: S<n> (<KEY>, run <name>) · Next: S<n> · Open checks: S<n> until <event>
-Pause asked: <date>   (only while the human's "pause" holds, `step-review`)
+Pause asked: <date and time>   (one line per "pause" of the human while it holds, `step-review`)
 Standing rules of the human: <one line each>
 Last review: <date>, base at <commit>
 

@@ -65,13 +65,13 @@ without `step_ok`, unless the review changed the plan. A change is any of:
 - the next step's frame or check changed;
 - a leftover carried into the next step;
 - a new question for the human, a recommended manual check among them;
-- the State has `Pause asked`.
+- the State has a `Pause asked` line.
 
 Statuses, "Later" and leftovers carried into later steps are not. The note of `continue`
 lists each kind with "no".
 
-The human may say "pause" at any time: add the State's line `Pause asked: <date>` and
-commit it, at once while the run is in your step or at a gate, otherwise once the run is
+The human may say "pause" at any time: add a State line `Pause asked: <date and time>`
+for each, and commit it, at once while the run is in your step or at a gate, otherwise once the run is
 back from `plan_review` or `readiness` (there it stops nothing). So the review sees it
 after a lost context; `run` says when it is removed (step 3).
 
