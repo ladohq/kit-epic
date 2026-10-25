@@ -2,15 +2,15 @@
 
 - Дата: 2026-10-25
 - Кит: корень worktree прогона `improve/epic-2` (`.lado/worktrees/kit-epic/improve-epic-2`), путь дан шагом
-- Коммит: 5f80dea
+- Коммит: 15e0e5b
 - Оценил: критик kit-builder (слои a и b)
-- Режим: повторная оценка, пятый визит `evaluate`. Предыдущий отчёт — эта же оценка на 785b306 (`changes`, 7 находок). Базой изменения служит 7e79334, её называет план. Правка этого визита: `git diff 785b306`, коммиты d86a6b4 и 5f80dea.
+- Режим: повторная оценка, шестой визит `evaluate`. Предыдущий отчёт — эта же оценка на 22d4446 (`changes`, 4 находки). Базой изменения служит 7e79334, её называет план. Правка этого визита: `git diff 22d4446`, коммит 15e0e5b.
 - Проходы:
-  - три прохода по правке d86a6b4 и тексту вокруг неё: проход 1 сделал критик, проходы 2 (с flow, с опытами в git) и 3 (с навыков) — свежие независимые субагенты;
+  - три прохода по правке 15e0e5b и тексту вокруг неё: проход 1 сделал критик, проходы 2 (с flow, с опытами в git) и 3 (с навыков) — свежие независимые субагенты;
   - проверку вырезанных правил критик сделал сам;
-  - находку high критик воспроизвёл сам в git 2.39.5 (во временной папке, не в ките);
-  - полный проход не делался: вердикт `changes`;
-  - находки одного прохода: отброшена 1 (проход 3, «нота `next` недоступна в `run` после потери контекста»: проход 2 показал, что нота, которая привела к гейту, приходит с ответом гейта), оставлено как подтверждённые 2.
+  - блокирующих находок не осталось, поэтому был полный проход по трём затронутым файлам (`flows/epic.yaml`, `skills/epic-files/SKILL.md`, `skills/step-review/SKILL.md`). Остальные файлы с полных проходов на 40e65d1 и 160a6c9 не менялись, кроме BLUEPRINT §5 (5f80dea);
+  - критик сам повторил опыт с reflog в git 2.39.5;
+  - находки одного прохода: отброшено 0, оставлено как подтверждённые 4.
 
 Находки — кандидаты, которые взвешивает человек. Это не оценка «сдал / не сдал».
 
@@ -21,13 +21,19 @@
 | a. `lado kits check` | OK; 0 предупреждений |
 | a. Бюджет | жёлтый: шагов в flow 7, гейтов 3; обоснованы в BLUEPRINT.md, раздел 4. Промпт лида 997 слов |
 | a. Flows | нарисован 1; совпадает со скелетом чертежа |
-| b. Рубрика | 4 новые находки в изменённом тексте (1 high, 1 medium, 2 low). Без находок 9 критериев из 12. Из 7 находок прошлого визита 6 RESOLVED, F12.3 — RESOLVED с новой дырой (F12.5) |
-| Охват | повторная оценка правки d86a6b4 (5 файлов) без полного прохода: остался high |
-| Правило остановки | не выполнено: 1 high, 1 medium |
+| b. Рубрика | 6 новых находок в изменённом тексте (0 high, 2 medium, 4 low). Без находок 9 критериев из 12. Из 4 находок прошлого визита 3 RESOLVED, F9.3 закрыта частично. Ещё 1 находка в разделе «Пропущено ранее» |
+| Охват | повторная оценка правки 15e0e5b (3 файла), с полным проходом по этим 3 файлам |
+| Правило остановки | не выполнено: 0 high, 2 medium. Это совет для гейта релиза, а не запрет |
 
 Счёт относится только к тому, что названо в строке «Охват». Его нельзя сравнивать со счётом полной оценки.
 
-**Вердикт: `changes`.** Новая проверка сброса в `intake` в самом частом случае (checkout человека на актуальной базе) не защищает от второго сброса, и тот стирает закоммиченные ответы (F12.5). Это воспроизведено.
+**Вердикт: `approved`.** Причины:
+- `lado kits check` прошёл без ошибок;
+- красных мер нет, жёлтые обоснованы;
+- `--compare` разницы не печатает;
+- открытых находок high нет.
+
+Находка high прошлого визита (F12.5) закрыта, и это подтверждено опытом в git.
 
 ### `lado kits check .`
 
@@ -75,12 +81,14 @@ same as the plan in BLUEPRINT.md (exit status 0)
 
 ## Исправить в первую очередь
 
-1. Условие сброса в `intake`: сбрасывать, только пока в reflog ветки рана есть лишь строка её создания (`branch: Created from HEAD`) и `git -C <the run's worktree> log origin/<base>..HEAD -- docs/epics/` не показывает коммитов рана (F12.5).
-2. Пауза: каждое «pause» — своя строка `Pause asked: <date time>`; нота `next` цитирует строку, `run` снимает только её (F3.9).
+Вердикт не блокируют. Решает человек: до релиза или в 0.2.1.
+
+1. Строка §5 чертежа: «checked by its reflog» (то есть по reflog ветки) → «by the worktree's HEAD reflog»; добавить, что на каждую паузу — своя строка (F5.12).
+2. Пауза во время `intake` нового эпика: State ещё нет, записать её некуда. Записывать строкой `decisions.md`, `plan` переносит её в State (F7.3).
 
 ## Находки
 
-Новые находки в правке d86a6b4. Номера продолжают отчёт на 785b306.
+Новые находки в правке 15e0e5b. Номера продолжают прежние отчёты.
 
 ### 1. Границы ролей
 
@@ -88,14 +96,14 @@ same as the plan in BLUEPRINT.md (exit status 0)
 
 ### 2. Передача между шагами
 
-Без находок. Нота, которая привела к `step_ok`, приходит в `run` с ответом гейта («Note before the gate»), так что проверка «a `next` whose note named that pause» выполнима.
+Без находок. Нота `next`, которая цитирует строки паузы, приходит в `run` с ответом `step_ok` (`runs.py`, `_answer_note`: «Note before the gate: …»), также после `continue` на пределе визитов.
 
 ### 3. Готовность и исходы
 
-- **F3.9** [medium] `flows/epic.yaml:141` (state `run`)
-  >          asked` only after `step_ok` approved a `next` whose note named that pause, never
-  В State одна строка `Pause asked: <date>` (`skills/epic-files/SKILL.md:47`), и нигде не сказано, что делать со вторым «pause». Например, человек говорит «pause» снова на `step_ok`, уже открытом из-за первой паузы. Лид либо оставляет строку, либо переписывает её дату. Затем `run` снимает её как «ту, что назвала нота», и вторая пауза теряется. Обе обычно с одной датой, отличить их нельзя. Следующий `review` даёт `continue`, и шаг стартует без «да» человека.
-  Fix: в `step-review` («What changes the plan») — каждое «pause» добавляет свою строку `Pause asked: <date time>`; нота `next` цитирует строку; `run` снимает только процитированную. Passes: 2/3
+- **F3.10** [low] `flows/epic.yaml:31` (state `intake`)
+  >          <the run's worktree> reflog show HEAD` has no line `reset: moving to
+  Пустой reflog читается как «сброса ещё не было». При `core.logAllRefUpdates=false` в репозитории лида git вообще не пишет reflog HEAD (проход 2 проверил: `reflog show HEAD` в новом worktree пуст после `reset --keep`). После потери контекста лид сбросит ветку ещё раз и сотрёт ответы. При настройках по умолчанию всё работает, случай редкий.
+  Fix: «an empty reflog proves nothing: then reset only when `git -C <the run's worktree> log origin/<base>..HEAD -- docs/epics/` shows no commit». Passes: 1/3, confirmed (опыт прохода 2)
 
 ### 4. Независимая проверка
 
@@ -103,18 +111,27 @@ same as the plan in BLUEPRINT.md (exit status 0)
 
 ### 5. Противоречия
 
-- **F5.11** [low] `flows/epic.yaml:26` (state `intake`)
-  >          numbers, its State back to `plan`.
-  Продолжаемый эпик сохраняет `plan.md`. Если отменённый ран оставил в State на базе `Pause asked`, по новому правилу («never after `plan_ok`») её ничто не снимет до первого ревью, и оно откроет `step_ok`, которого человек в этом ране не просил.
-  Fix: при продолжении — убрать `Pause asked` из State или спросить человека, держится ли пауза. Passes: 1/3, confirmed
+- **F5.12** [medium] `BLUEPRINT.md:369` (§5)
+  > | 2026-10-25 | 0.2.0 | `intake` resets the run's branch once, checked by its reflog after a lost context; the human's pause is lifted only by the `step_ok` it opened | `kit-reports/epic-0.2.0-2026-10-25.md`, F12.2–F12.4, F5.8, F3.8, F5.9, F7.2 |
+  Правка чертёж не трогала. «Its reflog» здесь — reflog ветки, а `flows/epic.yaml:32-33` прямо говорит, что он ненадёжен. Строки об одной строке на паузу, о цитировании нотой `next` и о сбросе пауз при продолжении эпика нет. Чертёж расходится с построенным текстом.
+  Fix: в этой строке — «by the worktree's HEAD reflog»; дописать «one `Pause asked` line per pause, quoted by `next`, removed after the `step_ok` that approved it; a continued epic drops the old lines». Passes: 3/3 (проход 3 — medium; проход 2 и полный проход упомянули, не засчитав; взят medium)
+
+- **F5.13** [low] `flows/epic.yaml:26` (state `intake`)
+  >          numbers, its State back to `plan` without the old run's `Pause asked` lines.
+  «The old run's» требует судить, кто написал строку. Пауза, сказанная в `intake` этого рана, по `step-review` коммитится сразу (это шаг лида), и в State её от старых отличает только дата.
+  Fix: «without the `Pause asked` lines it has on the base». Passes: 1/3, confirmed
 
 ### 6. Дублирование
 
-Без находок. Правило паузы теперь в одном месте (`run` шаг 3); `step-review:76` ссылается: «`run` says when it is removed (step 3)».
+Без находок. Снятие паузы — только в `run` шаг 3; `step-review:76` ссылается на него.
 
 ### 7. Когда звать человека
 
-Без находок.
+- **F7.3** [medium] `skills/step-review/SKILL.md:73-74`
+  > The human may say "pause" at any time: add a State line `Pause asked: <date and time>`
+  > for each, and commit it, at once while the run is in your step or at a gate, otherwise once the run is
+  У нового эпика во время `intake` нет `plan.md` и State: первый `plan.md` пишет `plan` (`epic.yaml:60`), а `epic-files:84` подтверждает «`brief.md` is written only at its end». Пауза, сказанная в `intake`, живёт только в контексте лида. После его потери первый `review` строки не увидит и отчитается `continue`, вопреки README:16 «stop at the next review». Раз `run` больше не снимает паузу после `plan_ok`, такая пауза должна дожить до первого ревью — но записать её негде.
+  Fix: «in `intake`, before `plan.md` exists, record it as a row of `decisions.md`; `plan` copies it into the State». Passes: full pass, confirmed
 
 ### 8. Петли на повторном визите
 
@@ -122,10 +139,16 @@ same as the plan in BLUEPRINT.md (exit status 0)
 
 ### 9. Краткость и «почему»
 
-- **F9.3** [low] `flows/epic.yaml:182` (state `review`)
-  >       kind of change with "no". Report `next` otherwise, always when the State has `Pause asked` (the note names it),
-  Строка не переразбита и вылезает за ширину файла (117 символов). Заодно не сказано, как именно нота «names it» (см. F3.9).
-  Fix: переразбить абзац; «(the note quotes the line `Pause asked`)». Passes: 1/3, confirmed
+- **F9.4** [low] `skills/step-review/SKILL.md:73-74`
+  > The human may say "pause" at any time: add a State line `Pause asked: <date and time>`
+  > for each, and commit it, at once while the run is in your step or at a gate, otherwise once the run is
+  У «for each» нет множественного числа, к которому оно относится, «commit it» — в единственном. Строка 74 не переразбита (102 символа).
+  Fix: «add a State line `Pause asked: <date and time>` for each pause and commit it, …», переразбить. Passes: 3/3
+
+- **F9.5** [low] `flows/epic.yaml:185` (state `review`)
+  >       `Pause asked` line (the note quotes each such line), with the revision and the next step's draft for the human's yes: note_summary is the
+  Остаток F9.3: строка 143 символа при ширине файла около 90.
+  Fix: переразбить абзац. Passes: 1/3, confirmed (`awk 'length>95'` — 143)
 
 ### 10. Описания навыков
 
@@ -137,61 +160,56 @@ same as the plan in BLUEPRINT.md (exit status 0)
 
 ### 12. Безопасность и рамки
 
-- **F12.5** [high] `flows/epic.yaml:30-32` (state `intake`)
-  >          request would bring into the base. After a lost context, reset only when `git -C
-  >          <the run's worktree> reflog show <the run's branch>` has no line `reset: moving
-  >          to origin/<base>`: a second reset would erase the answers committed since.
-  Когда checkout человека на актуальной базе (HEAD == `origin/<base>`, самый частый случай), первый `reset --keep` ветку не двигает и в её reflog ничего не пишет. После коммита ответов и потери контекста строки `reset: moving to origin/<base>` нет, правило велит сбросить, и сброс стирает закоммиченные ответы `decisions.md`. Они не запушены и остаются только в reflog. Вырезанная проверка «no commit under `docs/epics/`» (в 160a6c9 строка 29) теперь не защищает и от рана, который закоммитил ответы, не сбросив ветку.
-  Воспроизведено (git 2.39.5): `git worktree add -b run1 ../wt HEAD` на актуальной базе → `git -C ../wt reset --keep origin/main` → `reflog show run1` печатает только `run1@{0}: branch: Created from HEAD` → коммит → в reflog нет строки reset (`grep -c` = 0) → повторный `reset --keep origin/main` → `log -1` показывает базовый коммит, коммита ответов в ветке нет. При HEAD, не совпадающем с базой, строка `run2@{0}: reset: moving to origin/main` есть.
-  Fix: «reset only while `git -C <the run's worktree> reflog show <the run's branch>` has just its creation line and `git -C <the run's worktree> log origin/<base>..HEAD -- docs/epics/` shows none of this run's commits; never after». Альтернатива — `reflog show HEAD` в worktree рана: он записывает и сброс без сдвига. Passes: 3/3 (проходы 1 и 2 — high, проход 3 — medium по другой причине, тот же Fix; плюс cut-rule check)
+Без находок. Сброс в worktree рана, проверка по его reflog HEAD. Опыт критика (git 2.39.5): `worktree add -b run1 ../wt HEAD` на актуальной базе → `reset --keep origin/main` → `reflog show HEAD` печатает `HEAD@{0}: reset: moving to origin/main`, хотя ветка не сдвинулась. После коммита строка на месте (`grep -c` = 1). Reflog HEAD checkout человека не задет.
 
 ## Известные дыры
 
 | Известная дыра | Находка или как кит её закрывает |
 |---|---|
-| 1. Красная проверка без учёта окружения | Закрыта (без изменений) |
-| 2. Работа вне flow, мерж без гейта | Закрыта: проверка сброса больше не зависит от чужих коммитов под `docs/epics/`, поэтому чужие коммиты HEAD человека сбрасываются (F12.3 прошлого визита) |
-| 3. Путь вне worktree рана | Закрыта: `git -C <the run's worktree>` и для сброса, и для проверки |
+| 1. Красная проверка без учёта окружения | Закрыта: `epic-files` «First tell whether the work caused it» |
+| 2. Работа вне flow, мерж без гейта | Закрыта: проверка сброса не зависит от чужих коммитов, PR плана — после `plan_ok` |
+| 3. Путь вне worktree рана | Закрыта: `git -C <the run's worktree> reflog show HEAD` / `reset --keep` |
 | 4. Вердикт без порога | Закрыта (без изменений) |
 | 5. Навык зависимости пишет или спрашивает, где роли нельзя | Закрыта (без изменений) |
 | 6. Команды не в ладу с `expects.commands` | Закрыта: только `git` |
 | 7. Read-only роли не в ладу с работой | Закрыта (без изменений) |
 
-Ответы человека теряются при повторном сбросе — F12.5.
-
 ## Не прослежено
 
-Ничего: новых элементов нет, жёлтые меры обоснованы, `--compare` совпадает. Решение §1 (`BLUEPRINT.md:173`, «except once at `intake`, before its first commit») совпадёт с текстом, когда F12.5 вернёт проверку «нет коммитов рана». Строка §5 (`:369`) правке соответствует.
+Ничего: новых элементов нет, жёлтые меры обоснованы, `--compare` совпадает. Строка §5 чертежа отстаёт от текста — F5.12.
 
 ## Прежние находки
 
-Отчёт на 785b306.
+Отчёт на 22d4446.
 
 | Находка | Статус | Чем подтверждено |
 |---|---|---|
-| F12.3 [high] проверка сброса не отличает чужие коммиты | RESOLVED, с новой дырой | условие теперь по reflog ветки (`epic.yaml:30-32`), чужие коммиты не мешают; но сброс без сдвига в reflog не пишется — F12.5 |
-| F12.4 [medium] проверка не в worktree рана | RESOLVED | `epic.yaml:27-28` и `:30-31` — `git -C <the run's worktree>` |
-| F3.8 [medium] пауза по датам | RESOLVED | `epic.yaml:140-142` «only after `step_ok` approved a `next` whose note named that pause» (два «pause» подряд — F3.9) |
-| F5.9 [medium] две копии правила паузы | RESOLVED | `step-review:76` «`run` says when it is removed (step 3)» |
-| F5.10 [low] «`intake` puts its branch on the base» | RESOLVED | `supervisor.md:47` «(step 1)» |
-| F6.3 [low] старое условие в `epic-files` и чертеже | RESOLVED в `epic-files` | `epic-files:150` «except once in `intake`, as its step 1 says (when and why)»; `BLUEPRINT.md:173` — см. «Не прослежено» |
-| F7.2 [low] пауза до `plan_ok` снимается им | RESOLVED | `epic.yaml:141-142` «never / after `plan_ok`» |
-| Все находки BACKLOG «epic 0.2.1» (18) | STILL OPEN, оставлены планом | BACKLOG |
+| F12.5 [high] повторный сброс стирает ответы | RESOLVED | `epic.yaml:30-33` «`git -C / <the run's worktree> reflog show HEAD` has no line `reset: moving to / origin/<base>` (written even when the reset moves nothing; the branch's own / reflog is not)»; опыт выше (редкий случай с выключенным reflog — F3.10) |
+| F3.9 [medium] второе «pause» | RESOLVED | `epic-files:47` «one line per "pause" of the human»; `epic.yaml:141-144` «remove a `Pause asked` / line only after `step_ok` approved a `next` whose note quoted that line … keep every line the note did not quote» |
+| F5.11 [low] пауза отменённого рана | RESOLVED | `epic.yaml:26` «without the old run's `Pause asked` lines» (формулировка — F5.13) |
+| F9.3 [low] длинная строка и «names» | частично | «quotes» вместо «names»; строка 185 всё ещё 143 символа (F9.5) |
+| 18 находок BACKLOG «epic 0.2.1» | STILL OPEN, оставлены планом | BACKLOG |
 
 ## Вырезанные правила
 
-Правка d86a6b4.
+Правка 15e0e5b.
 
-| Вырезанное правило (файл:строка в 785b306) | Где оно сейчас |
+| Вырезанное правило (файл:строка в 22d4446) | Где оно сейчас |
 |---|---|
-| `epic.yaml:28-29` «only while `git log origin/<base>..HEAD -- docs/epics/` shows no commit; never after» | **утеряно** как защита от сброса после коммита: reflog-проверка его не заменяет, когда сброс не двигал ветку — F12.5 (Passes: cut-rule check) |
-| `epic.yaml:141-142` «only when its date is older than the gate … (a pause said at that gate or after it stays)» | `epic.yaml:140-142`, по ноте вместо дат; «keep a pause said at the gate itself» сохранено |
-| `step-review:76` «`run` removes it only after a gate approved later than the pause» | ссылка на `run` шаг 3 |
-| `epic-files:150` «before its first commit (`intake` says why)» | `epic-files:149-150` «as its step 1 says (when and why)» |
+| `epic.yaml:30-32` проверка по `reflog show <the run's branch>` | `epic.yaml:30-33` по `reflog show HEAD`, с причиной |
+| `epic.yaml:141-142` «whose note named that pause … keep a pause said at the gate itself» | `epic.yaml:141-144` «whose note quoted that line … keep every line the note did not quote (a pause said at the / gate itself or later)» |
+| `epic-files:47` «Pause asked: <date>» | `epic-files:47` «Pause asked: <date and time>», одна строка на паузу |
+
+Утерянных правил нет.
 
 ## Пропущено ранее
 
-Нет.
+Находки в тексте, который diff не трогает. Вердикт они не блокируют и в правиле остановки не считаются.
+
+- **F2.7** [low] `flows/epic.yaml:26` (state `intake`, продолжаемый эпик)
+  >          numbers, its State back to `plan` without the old run's `Pause asked` lines.
+  При продолжении State возвращают на `plan`, но `Epic run:` новым раном не заменяют, а поиск папки после рестарта (`agents/supervisor.md:29`: «the folder whose `plan.md` State names this run (`Epic run:`)») ищет именно по этому полю. Остаётся запасной путь через `epic-brief`. Это F2.4 отчёта `epic-0.1.0-2026-10-18.md`: она не в BACKLOG и в тексте не исправлена.
+  Fix: «… its State back to `plan` with `Epic run:` this run». Passes: full pass, confirmed
 
 ## Оставлено планом
 
@@ -199,8 +217,8 @@ same as the plan in BLUEPRINT.md (exit status 0)
 
 ## Вопросы для человека
 
-Нет: F12.5 — ошибка в самой правке, способ исправить ясен. Решение о релизе остаётся за человеком.
+1. Два medium (F5.12 — строка чертежа, F7.3 — пауза во время `intake`) и четыре low — короткие правки. Релизить с ними или внести в BACKLOG «epic 0.2.1»? Рекомендация: F5.12 исправить до релиза — это одна строка чертежа, а чертёж служит основой следующей оценки. Остальное — в BACKLOG.
 
 ## Найдено по пути
 
-- `[lado]` `flow_start` не принимает точку старта (`runs.py:90`). Именно поэтому киту приходится сбрасывать ветку и угадывать по git, был ли сброс. Параметр `base`/`from` у `flow_start` убрал бы весь этот механизм (F12.1–F12.5 этого отчёта).
+- `[lado]` `flow_start` не принимает точку старта (`runs.py:90`). Из-за этого кит держит сброс ветки и его проверку по reflog. Параметр `base`/`from` у `flow_start` убрал бы весь этот механизм.
