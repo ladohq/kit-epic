@@ -199,7 +199,7 @@ same as the plan in BLUEPRINT.md (exit status 0)
 |---|---|---|
 | F7.1 [medium] пауза не доходит до лида | RESOLVED | `supervisor.md:100` «**"Pause"**: record it as `step-review` says»; `step-review:8` «when the human says "pause"» |
 | F5.1 [medium] коммит паузы в `readiness` | RESOLVED | `step-review:74-75` «at once while the run is in your step or at a gate, otherwise once the run is / back from `plan_review` or `readiness`» |
-| F5.2 [medium] два смысла «paused» | RESOLVED | `epic-files:45` `paused (waits for sdlc)`, `:47` «Pause asked: <date>»; `epic.yaml:166` «When the epic waits for `sdlc`» (остаток формулировки — F9.2) |
+| F5.2 [medium] два смысла «paused» | RESOLVED | `epic-files:45` `paused (waits for sdlc)`, `:47` «Pause asked: <date>»; `epic.yaml:167` «When the epic waits for `sdlc`» (остаток формулировки — F9.2) |
 | F5.3 [medium] «yes, create» после `continue` | RESOLVED для шагов плана | `epic.yaml:131-133`; для шагов ревизии `step_ok` — F5.7 |
 | F5.4 [medium] нет пуша на `next` | RESOLVED | `epic.yaml:164` «and the run's branch on every outcome» |
 | F12.1 [high] «Пропущено ранее»: ран от HEAD человека | RESOLVED | `epic.yaml:27-30` сброс на `origin/<base>`; `supervisor.md` «`intake` puts its branch on the base» (условие сброса — F12.2) |
@@ -218,7 +218,7 @@ same as the plan in BLUEPRINT.md (exit status 0)
 | `epic.yaml:157-158` «the run's branch `run` pushes, but on `finish` bring the base into it» | `epic.yaml:164-165` «and the run's branch on every outcome, on `finish` after bringing / the base into it» |
 | `step-review:66` «the human said "pause"» | `step-review:68` «the State has `Pause asked`» |
 | `step-review:71-73` «Set the State's Phase to `paused (asked <date>)` and commit at once … `run` clears it when the human approves the next step» | `step-review:73-76` (строка `Pause asked`, коммит с условием); снятие — `epic.yaml:138` (расходится — F5.8) |
-| `epic-files:149-150` «Never reset the run's branch» без исключений | `epic-files:149-152` «except once in `intake` before its first commit» |
+| `epic-files:149-150` «Never reset the run's branch» без исключений | `epic-files:150-152` «except once in `intake` before its first commit» |
 
 Утерянных правил нет.
 
