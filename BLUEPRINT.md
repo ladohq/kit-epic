@@ -178,7 +178,13 @@ Decisions of the interview recorded here:
 - R18 is a third outcome of `review` (`continue: run`), not a conditional gate: the flow
   engine has none, and one is asked of LADO only if the outcome proves awkward (backlog of
   this repository). Open runs of 0.1.0 keep their flow: LADO runs a run on the snapshot
-  of its flow taken at its start.
+  of its flow taken at its start. The loop `run` → `review` → `run` without a gate needs a
+  limit (`lado kits check`): `run` has `max_visits: 20`, counting started steps (LAD-116
+  had 14). At the limit LADO asks the human `continue` or `cancel`, and from then on before
+  every further step, which is the 0.1.0 behaviour of a gate per step; the lead says so at
+  the limit and recommends `continue`. On `run`, not `review`, so rejections at `step_ok`
+  and returns from `readiness` do not use it up (decided by the supervisor at the
+  second triage; the human approves it at `plan_ok`).
 - `status` is an artifact, not a file of the product: it changes at every move, and a
   commit for each would be noise; what must survive a lost context is already in the
   plan's State, from which the lead rebuilds `status`.
@@ -230,6 +236,7 @@ states:
     outcomes: {approved: run, rejected: plan}
   run:
     agent: supervisor
+    max_visits: 20
     outcomes: {done: review}
   review:
     agent: supervisor
@@ -272,7 +279,7 @@ back to `review` as a new step.
 | `epic.plan` | work step | R2, R3, R5, R14 | Writes the plan (steps with checks, walking skeleton first, research first when needed, parallel candidates marked) and the first step's draft task and brief. Produces `plan` and `step-brief`; on a later visit reads `plan-review` and the human's reason. |
 | `epic.plan_review` | work step | R4 | Reads `epic-brief`, `plan`, `step-brief`; produces `plan-review`; `changes` sends it back. `max_visits: 3`: after three rounds the human decides. |
 | `epic.plan_ok` | gate | R5, R6, R18 | Only the human decides the plan and its open questions, and that approving it lets the lead start its steps without `step_ok` while the plan stays as approved (R18); reads `epic-brief`, `plan`, `plan-review`, `step-brief`. |
-| `epic.run` | work step | R6, R7, R8, R10, R12, R13, R14, R18, R19 | On its first visit after a gate or a `continue`: after `plan_ok` merges the approved plan change (pull request from the epic run's worktree, after green CI), otherwise pushes the run's branch (R10); writes the step's tracker key into `plan.md` and commits it as soon as the task exists, before starting its run; creates the step's tracker task(s) with `tracker`, starts the `task` run(s) with the brief, recommends on their gates, reports progress, and handles a release that happens meanwhile. Done when every started `task` run ended (LADO tells the lead). Produces nothing: the results are in the step runs' artifacts, which `review` reads. |
+| `epic.run` | work step | R6, R7, R8, R10, R12, R13, R14, R18, R19 | `max_visits: 20`: the gate-less loop with `review` needs a limit; at it the human answers before each further step. On its first visit after a gate or a `continue`: after `plan_ok` merges the approved plan change (pull request from the epic run's worktree, after green CI), otherwise pushes the run's branch (R10); writes the step's tracker key into `plan.md` and commits it as soon as the task exists, before starting its run; creates the step's tracker task(s) with `tracker`, starts the `task` run(s) with the brief, recommends on their gates, reports progress, and handles a release that happens meanwhile. Done when every started `task` run ended (LADO tells the lead). Produces nothing: the results are in the step runs' artifacts, which `review` reads. |
 | `epic.review` | work step | R9, R10, R12, R13, R14, R18, R22, R23 | Reviews the ended step(s) from the fixed sources of `step-review`, revises the plan, records decisions, brings the base into an epic branch, drafts the next step. Produces `retro`; writes `plan` and `step-brief` again. `continue` → `run` when nothing of the plan changed (R18), with each kind of change marked "no" in the note; `next` → `step_ok`; `finish` when no step is left. |
 | `epic.step_ok` | gate | R6, R10, R14, R18 | Creating a tracker task leaves the machine, and the human said "создать задачу" and "запустить" are theirs (brief, "Точки человека"); since 0.2.0 only when the review changed the plan: the human's yes at `plan_ok` covers the unchanged steps (R18, #1570); reads `retro`, `plan`, `step-brief`. |
 | `epic.readiness` | work step | R15, R22, R24 | Produces `delivery-report`; `gaps` sends a missing step back to `review`. `max_visits: 3`. |
@@ -353,3 +360,4 @@ Similar paragraphs: none. Overall: yellow.
 | 2026-10-25 | 0.2.0 | Steps to split and the release side in the steps' checks, blocking for the plan critic (R20, R21); the epic's numbering stays out of the product (R22) | LAD-145 R6, R7, R8; report F3.1, F4.1, F12.3 |
 | 2026-10-25 | 0.2.0 | The review checks whether a visible change was checked by hand (R23); a later readiness focuses on the gaps and the base's diff (R24); root first in the lead's defect questions (R8) | LAD-145 R11, R12, R4; #1570 |
 | 2026-10-25 | 0.2.0 | The other findings of the full assessment, among them the open ones of 0.1.1 (F3.2, F7.1, F2.6, F6.1, F8.1) | `kit-reports/epic-0.1.0-2026-10-25.md`; #1570, answer 5 |
+| 2026-10-25 | 0.2.0 | `run` gets `max_visits: 20`: the loop `run` → `review` → `run` via `continue` has no gate, and `lado kits check` requires a limit | author's `build-report` of `improve/epic-2` |

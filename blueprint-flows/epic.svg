@@ -68,7 +68,7 @@
   <g data-state="run" data-kind="work">
     <rect x="349.6" y="558.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
     <text x="439.6" y="578.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">run</text>
-    <text x="439.6" y="594.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">supervisor</text>
+    <text x="439.6" y="594.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">supervisor · max_visits 20</text>
   </g>
   <g data-state="review" data-kind="work">
     <rect x="349.6" y="680.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
