@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="670" height="1288" viewBox="0 0 670 1288" role="img" aria-label="Flow epic">
+  <title>Flow epic</title>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto" markerUnits="userSpaceOnUse">
+      <polygon points="0 0, 8 4, 0 8" fill="#6b7280"/>
+    </marker>
+  </defs>
+  <rect width="670" height="1288" fill="#ffffff"/>
+  <text x="30" y="34" font-family="system-ui, -apple-system, sans-serif" font-size="15" font-weight="600" fill="#1b2236">epic</text>
+  <circle cx="439.6" cy="44.0" r="6" fill="#1b2236"/>
+  <path d="M 439.6 50.0 L 439.6 70.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <path d="M 439.6 116.0 L 439.6 192.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="445.6" y="158.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">ready</text>
+  <path d="M 439.6 238.0 L 439.6 314.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="445.6" y="280.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">ready</text>
+  <path d="M 439.6 360.0 L 439.6 436.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="445.6" y="402.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">ok</text>
+  <path d="M 349.6 337.0 L 170.0 337.0 L 170.0 221.0 L 349.6 221.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="345.6" y="333.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">changes</text>
+  <path d="M 439.6 482.0 L 439.6 558.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="445.6" y="524.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">approved</text>
+  <path d="M 349.6 459.0 L 80.0 459.0 L 80.0 221.0 L 349.6 221.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="345.6" y="455.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">rejected</text>
+  <path d="M 439.6 604.0 L 439.6 680.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="445.6" y="646.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">done</text>
+  <path d="M 349.6 703.0 L 152.0 703.0 L 152.0 587.0 L 349.6 587.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="345.6" y="699.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">continue</text>
+  <path d="M 432.6 726.0 C 432.6 764.0, 329.6 764.0, 329.6 802.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="387.1" y="768.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">next</text>
+  <path d="M 446.6 726.0 C 446.6 764.0, 549.6 764.0, 549.6 802.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="504.1" y="768.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">finish</text>
+  <path d="M 239.6 825.0 L 62.0 825.0 L 62.0 587.0 L 349.6 587.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="235.6" y="821.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">approved</text>
+  <path d="M 239.6 825.0 L 134.0 825.0 L 134.0 709.0 L 349.6 709.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="235.6" y="821.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">rejected</text>
+  <path d="M 549.6 848.0 C 549.6 886.0, 439.6 886.0, 439.6 924.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="500.6" y="890.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">ready</text>
+  <path d="M 459.6 825.0 L 116.0 825.0 L 116.0 709.0 L 349.6 709.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="455.6" y="821.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">gaps</text>
+  <path d="M 439.6 970.0 L 439.6 1046.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="445.6" y="1012.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">approved</text>
+  <path d="M 349.6 947.0 L 98.0 947.0 L 98.0 831.0 L 459.6 831.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="345.6" y="943.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">rejected</text>
+  <path d="M 439.6 1092.0 L 439.6 1168.0" fill="none" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrow)"/>
+  <text x="445.6" y="1134.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="start">closed</text>
+  <path d="M 349.6 1069.0 L 44.0 1069.0 L 44.0 831.0 L 459.6 831.0" fill="none" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#arrow)"/>
+  <text x="345.6" y="1065.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563" text-anchor="end">stale</text>
+  <g data-state="intake" data-kind="work">
+    <rect x="349.6" y="70.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="439.6" y="90.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">intake</text>
+    <text x="439.6" y="106.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">supervisor</text>
+  </g>
+  <g data-state="plan" data-kind="work">
+    <rect x="349.6" y="192.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="439.6" y="212.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">plan</text>
+    <text x="439.6" y="228.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">supervisor</text>
+  </g>
+  <g data-state="plan_review" data-kind="work">
+    <rect x="349.6" y="314.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="439.6" y="334.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">plan_review</text>
+    <text x="439.6" y="350.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">plan-critic · max_visits 3</text>
+  </g>
+  <g data-state="plan_ok" data-kind="gate">
+    <rect x="349.6" y="436.0" width="180" height="46" rx="8" fill="#fdf0e7" stroke="#d06a2c" stroke-width="1.5"/>
+    <text x="439.6" y="456.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#a0522d">plan_ok</text>
+    <text x="439.6" y="472.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#a0522d">gate: approval</text>
+  </g>
+  <g data-state="run" data-kind="work">
+    <rect x="349.6" y="558.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="439.6" y="578.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">run</text>
+    <text x="439.6" y="594.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">supervisor · max_visits 20</text>
+  </g>
+  <g data-state="review" data-kind="work">
+    <rect x="349.6" y="680.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="439.6" y="700.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">review</text>
+    <text x="439.6" y="716.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">supervisor</text>
+  </g>
+  <g data-state="step_ok" data-kind="gate">
+    <rect x="239.6" y="802.0" width="180" height="46" rx="8" fill="#fdf0e7" stroke="#d06a2c" stroke-width="1.5"/>
+    <text x="329.6" y="822.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#a0522d">step_ok</text>
+    <text x="329.6" y="838.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#a0522d">gate: approval</text>
+  </g>
+  <g data-state="readiness" data-kind="work">
+    <rect x="459.6" y="802.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="549.6" y="822.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">readiness</text>
+    <text x="549.6" y="838.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">delivery · max_visits 3</text>
+  </g>
+  <g data-state="delivery_ok" data-kind="gate">
+    <rect x="349.6" y="924.0" width="180" height="46" rx="8" fill="#fdf0e7" stroke="#d06a2c" stroke-width="1.5"/>
+    <text x="439.6" y="944.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#a0522d">delivery_ok</text>
+    <text x="439.6" y="960.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#a0522d">gate: approval</text>
+  </g>
+  <g data-state="close" data-kind="work">
+    <rect x="349.6" y="1046.0" width="180" height="46" rx="8" fill="#ffffff" stroke="#9ca3af" stroke-width="1.5"/>
+    <text x="439.6" y="1066.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#1b2236">close</text>
+    <text x="439.6" y="1082.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">supervisor</text>
+  </g>
+  <g data-state="done" data-kind="end">
+    <rect x="349.6" y="1168.0" width="180" height="46" rx="8" fill="#e8f6ee" stroke="#36a86e" stroke-width="1.5"/>
+    <text x="439.6" y="1188.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="600" fill="#2a7a50">done</text>
+    <text x="439.6" y="1204.0" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#2a7a50">end</text>
+  </g>
+  <rect x="30.0" y="1244.0" width="14" height="14" rx="3" fill="#ffffff" stroke="#9ca3af"/>
+  <text x="50.0" y="1255.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#1b2236">work step (agent)</text>
+  <rect x="180.0" y="1244.0" width="14" height="14" rx="3" fill="#fdf0e7" stroke="#d06a2c"/>
+  <text x="200.0" y="1255.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#a0522d">gate (human)</text>
+  <rect x="330.0" y="1244.0" width="14" height="14" rx="3" fill="#e8f6ee" stroke="#36a86e"/>
+  <text x="350.0" y="1255.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#2a7a50">end</text>
+  <path d="M 480.0 1251.0 L 506.0 1251.0" stroke="#6b7280" stroke-width="1.2" stroke-dasharray="5 3"/>
+  <text x="512.0" y="1255.0" font-family="system-ui, -apple-system, sans-serif" font-size="11" fill="#4b5563">back to an earlier step</text>
+</svg>
