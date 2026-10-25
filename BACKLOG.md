@@ -54,3 +54,16 @@ Left for later at the second `release_ok` of `improve/epic-2` (report commit 374
   name recurs between runs: take the names from the run's lines in `lado log`.
 - **F8.2** [low, missed earlier] After `gaps`, `review` must read every step source again;
   the source then is the `delivery-report`.
+- **F7.3** [medium] A "pause" said during `intake` of a new epic has no State to go to; after
+  a lost context the first `review` may report `continue`. Fix: at `intake` record it as a
+  row of `decisions.md`, which `plan` carries into the State.
+- **F3.10** [low] With `core.logAllRefUpdates=false` the worktree's HEAD reflog is empty and
+  `intake` cannot tell it already reset.
+- **F5.13** [low] "the old run's" pause lines of a continued epic: wording.
+- **F9.4** [low] `step-review` line 74 ("for each") is long.
+- **F9.5** [low] `flows/epic.yaml` line 185 is long.
+- **F2.7** [low, missed earlier] A continued epic does not put the new run in the State's
+  `Epic run:`.
+
+From `kit-reports/epic-0.2.0-2026-10-25.md` (commit 40c6183); the human released 0.2.0 with
+them (gate `release_ok` of `improve/epic-2`, 2026-10-25).
