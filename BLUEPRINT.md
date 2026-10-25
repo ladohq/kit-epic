@@ -170,7 +170,9 @@ Decisions of the interview recorded here:
   report `kit-reports/epic-0.1.0-2026-10-18.md`, F3.1).
 - The pushes to an epic branch get no gate of their own: the human's choice of the
   strategy at intake covers them, so the gates stay at three (F12.2, F12.3).
-- The run's branch is never reset: the base is merged into it after the plan pull request
+- The run's branch is never reset, except once at `intake`, before its first commit, onto
+  `origin/<base>`: LADO starts the run from the human's HEAD, which may be off the base or
+  hold unpushed commits (F12.1 of the 0.2.0 release check). Afterwards the base is merged into it after the plan pull request
   of `run` (a fast-forward), before `readiness` and in `close` before the closing pull
   request, with the conflict rule of `epic-files`, so no decision row is lost (F12.1 of
   0.1.0; F3.1 of the 0.2.0 re-evaluation).
@@ -363,3 +365,4 @@ Similar paragraphs: none. Overall: yellow.
 | 2026-10-25 | 0.2.0 | The other findings of the full assessment, among them the open ones of 0.1.1 (F3.2, F7.1, F2.6, F6.1, F8.1) | `kit-reports/epic-0.1.0-2026-10-25.md`; #1570, answer 5 |
 | 2026-10-25 | 0.2.0 | `run` gets `max_visits: 20`: the loop `run` → `review` → `run` via `continue` has no gate, and `lado kits check` requires a limit | author's `build-report` of `improve/epic-2` |
 | 2026-10-25 | 0.2.0 | The run's branch is never reset; the base is merged in after the plan pull request, before `readiness` and in `close`; `plan_ok`'s question names the release checklist's own pull requests | `kit-reports/epic-0.2.0-2026-10-25.md`, F3.1, F12.1, F5.3 |
+| 2026-10-25 | 0.2.0 | `intake` puts the run's branch on `origin/<base>` before its first commit; the human's pause gets its own State line and rule in the lead's role; `plan_ok` named as the "yes, create" for the approved plan's tasks; `review` pushes the run's branch on every outcome | `kit-reports/epic-0.2.0-2026-10-25.md` (evaluation at `release_ok`), F12.1, F7.1, F5.1–F5.4; the human's rejection at `release_ok` |
