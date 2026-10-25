@@ -24,12 +24,12 @@ states:
          extend its files: every row of `decisions.md` stays, `brief.md` gains the new
          statement with the old one kept, and `plan.md` keeps its done steps and their
          numbers, its State back to `plan`.
-         Before the first commit, put the run's branch on the base: `git reset --keep
-         origin/<base>` in the run's worktree, the one reset of the run's branch, and only
-         while `git log origin/<base>..HEAD -- docs/epics/` shows no commit; never after,
-         or a lost context would erase the human's committed answers. LADO starts the
-         branch from the human's HEAD, whose other commits the plan's pull request would
-         bring into the base.
+         Before the first commit, put the run's branch on the base, once: `git -C <the
+         run's worktree> reset --keep origin/<base>`, the one reset of the run's branch.
+         LADO starts the branch from the human's HEAD, whose other commits the plan's pull
+         request would bring into the base. After a lost context, reset only when `git -C
+         <the run's worktree> reflog show <the run's branch>` has no line `reset: moving
+         to origin/<base>`: a second reset would erase the answers committed since.
       2. Settle the epic's key with the human first (`epic-files`, "The key"): it names the
          folder that keeps their answers.
       3. Assess it against the readiness checklist of `epic-files` (`brief.md`).
@@ -137,9 +137,9 @@ states:
          "Writing to the tracker"), and at once mark the step "in progress (<KEY>)" in
          `plan.md` and commit, so a restart creates no second task. Start its run of `task`
          (`step-brief`, "Starting the step's run"). Add the run to the step's status,
-         remove Phase `paused (waits for sdlc)` from the State, and the line `Pause asked`
-         only when its date is older than the gate the human just approved (a pause said
-         at that gate or after it stays); commit.
+         remove Phase `paused (waits for sdlc)` from the State; remove the line `Pause
+         asked` only after `step_ok` approved a `next` whose note named that pause, never
+         after `plan_ok`, and keep a pause said at the gate itself; commit.
       4. While the runs go, lead them as your role says ("While a step runs", "Telling the
          human").
       On the 20th visit (`flow_status`) tell the human that from the next one LADO asks
@@ -179,7 +179,7 @@ states:
       are committed. Report `continue` when nothing changed the plan (`step-review`, "What
       changes the plan") and the next step is one the human approved at `plan_ok` or an
       earlier `step_ok`: note_summary is the step reviewed and the next one; note_body each
-      kind of change with "no". Report `next` otherwise, always when the State has `Pause asked`,
+      kind of change with "no". Report `next` otherwise, always when the State has `Pause asked` (the note names it),
       with the revision and the next step's draft for the human's yes: note_summary is the
       step reviewed and the next one; note_body the plan changes and your recommendation.
       Report `finish` when the plan has no step left, or when the human asks for the

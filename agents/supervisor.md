@@ -44,8 +44,8 @@ names is not the epic's: leave it to `lead-sdlc`.
 
 Start a run of `epic` with `flow_start`: the task is the human's statement whole, with
 what they said about it; the name `epic-<a short slug of the feature>`; `human_language`
-the settings' chat language. `intake` puts its branch on the base. Several epics may go
-at once, one run each.
+the settings' chat language. `intake` puts its branch on the base (step 1). Several
+epics may go at once, one run each.
 
 ## Where you write
 

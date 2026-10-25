@@ -73,7 +73,7 @@ lists each kind with "no".
 The human may say "pause" at any time: add the State's line `Pause asked: <date>` and
 commit it, at once while the run is in your step or at a gate, otherwise once the run is
 back from `plan_review` or `readiness` (there it stops nothing). So the review sees it
-after a lost context; `run` removes it only after a gate approved later than the pause.
+after a lost context; `run` says when it is removed (step 3).
 
 ## Traps between steps
 

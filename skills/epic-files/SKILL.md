@@ -147,7 +147,7 @@ documentation.
   rows of both sides (newest last); in `plan.md` take the newer side and check it against
   `decisions.md`; in the release checklist keep the base's lines and add the run's; then
   commit. In any other file `git merge --abort` and tell the human. Never reset the run's
-  branch, except once in `intake` before its first commit (`intake` says why): later, a
+  branch, except once in `intake`, as its step 1 says (when and why): later, a
   commit not on the base yet (a row of `decisions.md`, a step's status in `plan.md`)
   would be lost.
 - After a commit to a file that is also an artifact (`plan`, `epic-brief`,
